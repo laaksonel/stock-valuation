@@ -1,7 +1,7 @@
 package io.dontcare.stockvaluation.api.morningstar
 
 import cats.effect._
-import io.dontcare.stockvaluation.stock.StockEntity.StockTicker
+import io.dontcare.stockvaluation.entity.StockTicker
 import org.http4s.Method._
 import org.http4s._
 import org.http4s.client.Client
@@ -19,6 +19,7 @@ object MorningStarApi {
     val dsl = new Http4sClientDsl[F]{}
     import dsl._
     def getCurrentValuationPage(ticker: StockTicker): F[String] = {
+      // TODO: Move url to config
       C.expect[String](GET(uri"http://localhost:8090"))
     }
   }

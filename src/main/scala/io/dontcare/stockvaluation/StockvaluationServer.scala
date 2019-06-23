@@ -27,7 +27,7 @@ object StockvaluationServer {
       // in the underlying routes.
       httpApp = (
 //        StockvaluationRoutes.helloWorldRoutes[F](helloWorldAlg) <+>
-        StockvaluationRoutes.jokeRoutes[F](jokeAlg, morningStarAlg)
+        StockvaluationRoutes.stockValueRoutes[F](jokeAlg, morningStarAlg)
       ).orNotFound
 
       // With Middlewares in place
