@@ -2,15 +2,15 @@ package io.dontcare.stockvaluation.service
 
 import io.dontcare.stockvaluation.entity._
 
-trait StockValutionCalculator {
+trait StockValuationCalculator {
   def priceEarningsMultiple(avgFiveYearPE: AvgFiveYearPE,
                             earningsPerShare: EarningsPerShare,
                             expectedGrowthRate: ExpectedGrowthRate): StockValuationResult
 }
 
-object StockValutionCalculator {
+object StockValuationCalculator {
 
-  def impl(marginOfSafety: Float): StockValutionCalculator = new StockValutionCalculator {
+  def impl(marginOfSafety: Float): StockValuationCalculator = new StockValuationCalculator {
 
     def priceEarningsMultiple(avgFiveYearPE: AvgFiveYearPE,
                               earningsPerShare: EarningsPerShare,

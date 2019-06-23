@@ -9,6 +9,8 @@ import org.http4s.server.blaze.BlazeServerBuilder
 import org.http4s.server.middleware.Logger
 import fs2.Stream
 import io.dontcare.stockvaluation.api.morningstar.MorningStarApi
+import io.dontcare.stockvaluation.api.yahoo.YahooApi
+import io.dontcare.stockvaluation.service.StockValuationCalculator
 
 import scala.concurrent.ExecutionContext.global
 
@@ -20,6 +22,9 @@ object StockvaluationServer {
       helloWorldAlg = HelloWorld.impl[F]
       jokeAlg = Jokes.impl[F](client)
       morningStarAlg = MorningStarApi.impl[F](client)
+      yahooAlg = YahooApi.impl[F](client)
+
+      stockValuator = StockValuationCalculator.impl(7.5f)
 
       // Combine Service Routes into an HttpApp.
       // Can also be done via a Router if you
@@ -27,7 +32,7 @@ object StockvaluationServer {
       // in the underlying routes.
       httpApp = (
 //        StockvaluationRoutes.helloWorldRoutes[F](helloWorldAlg) <+>
-        StockvaluationRoutes.stockValueRoutes[F](jokeAlg, morningStarAlg)
+        StockvaluationRoutes.stockValueRoutes[F](morningStarAlg, yahooAlg, stockValuator)
       ).orNotFound
 
       // With Middlewares in place
