@@ -3,15 +3,13 @@ package io.dontcare.stockvaluation
 import cats.Applicative
 import cats.effect.Sync
 import cats.implicits._
-import io.circe.{Encoder, Decoder, Json, HCursor}
 import io.circe.generic.semiauto._
-import org.http4s._
-import org.http4s.implicits._
-import org.http4s.{EntityDecoder, EntityEncoder, Method, Uri, Request}
-import org.http4s.client.Client
-import org.http4s.client.dsl.Http4sClientDsl
+import io.circe.{Decoder, Encoder}
 import org.http4s.Method._
 import org.http4s.circe._
+import org.http4s.client.Client
+import org.http4s.client.dsl.Http4sClientDsl
+import org.http4s.{EntityDecoder, EntityEncoder, _}
 
 trait Jokes[F[_]]{
   def get: F[Jokes.Joke]
@@ -35,7 +33,7 @@ object Jokes {
   def impl[F[_]: Sync](C: Client[F]): Jokes[F] = new Jokes[F]{
     val dsl = new Http4sClientDsl[F]{}
     import dsl._
-    def get: F[Jokes.Joke] = {
+    def get: F[Joke] = {
       C.expect[Joke](GET(uri"https://icanhazdadjoke.com/"))
         .adaptError{ case t => JokeError(t)} // Prevent Client Json Decoding Failure Leaking
     }

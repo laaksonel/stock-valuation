@@ -1,7 +1,9 @@
 package io.dontcare.stockvaluation
 
+import cats.data.OptionT
 import cats.effect.Sync
 import cats.implicits._
+import io.dontcare.stockvaluation.api.{MissingEarningsPerShare, MissingFiveYearEstimate, MissingValuationPage}
 import io.dontcare.stockvaluation.api.morningstar.MorningStarApi
 import io.dontcare.stockvaluation.api.yahoo.YahooApi
 import io.dontcare.stockvaluation.entity.{AvgFiveYearPE, EarningsPerShare, ExpectedGrowthRate, StockTicker}
@@ -9,12 +11,14 @@ import io.dontcare.stockvaluation.service.StockValuationCalculator
 import org.http4s.HttpRoutes
 import org.http4s.dsl.Http4sDsl
 import org.jsoup.Jsoup
+import io.circe.syntax._
 
 trait Console[F[_]] {
   def putStrLn(line: String): F[Unit]
 }
 
 object StockvaluationRoutes {
+  import YahooApi.EarningsEstimate._
   implicit class StringTicker(val value: String) extends AnyVal {
     def asTicker: StockTicker = StockTicker(value)
   }
@@ -26,14 +30,23 @@ object StockvaluationRoutes {
       case GET -> Root / "morningstar" / stockTicker =>
         // TODO: Move to service
         val ticker = stockTicker.asTicker
-        for {
-          htmlContent <- M.getCurrentValuationPage(ticker)
-          eps <- Y.getEarningsPerShare(ticker)
+        val valuation = for {
           growthRate <- Y.getExpectedGrowthRate(ticker)
-          fiveYearAveragePE = AvgFiveYearPE(Jsoup.parse(htmlContent).select(":containsOwn(Price/Earnings) ~ td:last-child").text().toFloat)
-          valuation = stockValuator.priceEarningsMultiple(fiveYearAveragePE, EarningsPerShare(eps), ExpectedGrowthRate(growthRate))
-          resp <- Ok(valuation)
-        } yield resp
+//          htmlContent <- M.getCurrentValuationPage(ticker)
+//          eps <- Y.getEarningsPerShare(ticker)
+
+//          fiveYearAveragePE = AvgFiveYearPE(Jsoup.parse(htmlContent).select(":containsOwn(Price/Earnings) ~ td:last-child").text().toFloat)
+//          valuation = stockValuator.priceEarningsMultiple(fiveYearAveragePE, EarningsPerShare(eps), ExpectedGrowthRate(growthRate.growth.raw))
+//          valuation = 123
+//          resp <- Ok(valuation)
+        } yield growthRate
+
+        valuation.value.flatMap {
+          case Right(result) => Ok(result)
+          case Left(MissingFiveYearEstimate(_)) => BadRequest("Five year")
+//          case Left(MissingValuationPage(_)) => BadRequest("Valuation")
+//          case Left(MissingEarningsPerShare(_)) => BadRequest("Earnings")
+        }
     }
   }
 

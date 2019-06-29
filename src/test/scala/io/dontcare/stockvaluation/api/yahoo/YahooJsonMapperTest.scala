@@ -2,6 +2,7 @@ package io.dontcare.stockvaluation.api.yahoo
 
 import cats.effect.IO
 import io.circe.parser._
+import io.dontcare.stockvaluation.api.yahoo.YahooApi.EarningsEstimate
 import org.scalactic.{Equality, TolerantNumerics}
 import org.scalatest.{FlatSpec, OptionValues}
 import org.scalatest.Matchers._
@@ -11,6 +12,7 @@ import scala.util.Try
 
 class YahooJsonMapperTest extends FlatSpec with OptionValues {
   private val epsilon = 1e-3f
+  import YahooApi._
 
   implicit val floatEq: Equality[Float] = TolerantNumerics.tolerantFloatEquality(epsilon)
 
@@ -19,8 +21,9 @@ class YahooJsonMapperTest extends FlatSpec with OptionValues {
       url <- Try(getClass.getResource("/yahoo-earnings-response.json")).toOption
       file = Source.fromURL(url).mkString
       json <- parse(file).toOption
-      estimate <- YahooJsonMapper.earningsEstimate(json)
-    } yield estimate
+      estimates <- YahooJsonMapper.earningsEstimate(json)
+      e <- estimates.headOption
+    } yield e
 
     result.map(_.period) should be (Some(Period.plusFiveYears))
     result
