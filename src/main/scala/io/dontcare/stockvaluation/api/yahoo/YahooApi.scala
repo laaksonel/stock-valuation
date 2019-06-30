@@ -40,7 +40,7 @@ object Period extends Enumeration {
 }
 
 trait YahooApi[F[_]] {
-  def getEarningsPerShare(ticker: StockTicker): EitherT[F, MissingEarningsPerShare.type, Float]
+  def getEarningsPerShare(ticker: StockTicker): EitherT[F, MissingEarningsPerShare, Float]
   def getExpectedGrowthRate(ticker: StockTicker): EitherT[F, MissingFiveYearEstimate, EarningsEstimate]
 }
 
@@ -86,16 +86,27 @@ object YahooApi {
     private val dsl = new Http4sClientDsl[F]{}
     import dsl._
 
-    def getEarningsPerShare(ticker: StockTicker): EitherT[F, MissingEarningsPerShare.type, Float] = {
-//      Sync[F].delay(0f)
+    def getEarningsPerShare(ticker: StockTicker): EitherT[F, MissingEarningsPerShare, Float] = {
       EitherT.liftF(Sync[F].delay(0f))
     }
 
     def getExpectedGrowthRate(ticker: StockTicker): EitherT[F, MissingFiveYearEstimate, EarningsEstimate] = {
-      val result = C.expect[EarningsTrend](GET(uri"https://query1.finance.yahoo.com/v10/finance/quoteSummary/DLB?modules=earningsTrend"))
-        .map(_.trend.find(_.period == Period.plusFiveYears))
+      val eitherUri = Uri.fromString(s"https://query1.finance.yahoo.com/v10/finance/quoteSummary/$ticker?modules=earningsTrend")
 
-      EitherT.fromOptionF(result, MissingFiveYearEstimate(ticker))
+      EitherT {
+        eitherUri match {
+          case Right(uri) =>
+            C.expect[EarningsTrend](GET(uri)).map{
+              _.trend.find(_.period == Period.plusFiveYears) match {
+                case Some(estimate) => Right(estimate)
+                case None => Left(MissingFiveYearEstimate(ticker))
+              }
+            }
+          case _ =>
+            Either.left[MissingFiveYearEstimate, EarningsEstimate](MissingFiveYearEstimate(ticker))
+              .pure[F]
+        }
+      }
     }
   }
 }

@@ -5,7 +5,10 @@ import io.circe.{Encoder, Json}
 import org.http4s.EntityEncoder
 import org.http4s.circe._
 
-final case class StockTicker(ticker: String) extends AnyVal
+final case class StockTicker(ticker: String) extends AnyVal {
+  override def toString: String = ticker
+}
+
 final case class StockValuationResult(value: Float) extends AnyVal {
   def *(variable: StockValuationVariable) = variable.value * value
 }

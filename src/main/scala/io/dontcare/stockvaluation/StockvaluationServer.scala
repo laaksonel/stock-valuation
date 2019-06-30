@@ -10,7 +10,10 @@ import org.http4s.server.middleware.Logger
 import fs2.Stream
 import io.dontcare.stockvaluation.api.morningstar.MorningStarApi
 import io.dontcare.stockvaluation.api.yahoo.YahooApi
+import io.dontcare.stockvaluation.endpoint.StockvaluationRoutes
+import io.dontcare.stockvaluation.entity.StockTicker
 import io.dontcare.stockvaluation.service.StockValuationCalculator
+import org.http4s.Uri
 
 import scala.concurrent.ExecutionContext.global
 
@@ -22,20 +25,14 @@ object StockvaluationServer {
       helloWorldAlg = HelloWorld.impl[F]
       jokeAlg = Jokes.impl[F](client)
       morningStarAlg = MorningStarApi.impl[F](client)
+
+      // TODO: Read from configs
       yahooAlg = YahooApi.impl[F](client)
 
       stockValuator = StockValuationCalculator.impl(7.5f)
 
-      // Combine Service Routes into an HttpApp.
-      // Can also be done via a Router if you
-      // want to extract a segments not checked
-      // in the underlying routes.
-      httpApp = (
-//        StockvaluationRoutes.helloWorldRoutes[F](helloWorldAlg) <+>
-        StockvaluationRoutes.stockValueRoutes[F](morningStarAlg, yahooAlg, stockValuator)
-      ).orNotFound
+      httpApp = StockvaluationRoutes.stockValueRoutes[F](morningStarAlg, yahooAlg, stockValuator).orNotFound
 
-      // With Middlewares in place
       finalHttpApp = Logger.httpApp(true, true)(httpApp)
 
       exitCode <- BlazeServerBuilder[F]
