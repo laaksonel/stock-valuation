@@ -4,7 +4,7 @@ import cats.effect.Sync
 import cats.implicits._
 import io.dontcare.stockvaluation.api.morningstar.MorningStarApi
 import io.dontcare.stockvaluation.api.yahoo.YahooApi
-import io.dontcare.stockvaluation.entity.{AvgFiveYearPE, EarningsPerShare, ExpectedGrowthRatePercent, StockTicker}
+import io.dontcare.stockvaluation.entity.{AverageFiveYearPE, EarningsPerShare, ExpectedGrowthRatePercent, StockTicker}
 import io.dontcare.stockvaluation.service.StockValuationCalculator
 import org.http4s.HttpRoutes
 import org.http4s.dsl.Http4sDsl
@@ -23,16 +23,18 @@ object StockvaluationRoutes {
     val dsl = new Http4sDsl[F]{}
     import dsl._
     HttpRoutes.of[F] {
-      case GET -> Root / "morningstar" / stockTicker =>
+      case GET -> Root / "valuation" / stockTicker =>
         // TODO: Move to service
         val ticker = stockTicker.asTicker
 
         val result = for {
+
+          // TODO: Cache the external values
           growthRate <- Y.getExpectedGrowthRate(ticker).leftMap(_.asErrorResponse())
           htmlContent <- M.getCurrentValuationPage(ticker).leftMap(_.asErrorResponse())
           eps <- Y.getEarningsPerShare(ticker).leftMap(_.asErrorResponse())
 
-          fiveYearAveragePE = AvgFiveYearPE(
+          fiveYearAveragePE = AverageFiveYearPE(
             Jsoup.parse(htmlContent)
               .select(":matchesOwn(^Price/Earnings$) ~ td:eq(4)")
               .text()

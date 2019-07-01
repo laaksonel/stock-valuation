@@ -21,13 +21,13 @@ object StockValuationResult {
 
 sealed trait StockValuationVariable
 
-final case class AvgFiveYearPE(value: Float) extends StockValuationVariable
+final case class AverageFiveYearPE(value: Float) extends StockValuationVariable
 final case class EarningsPerShare(value: Float) extends StockValuationVariable
-final case class ExpectedGrowthRatePercent(value: Float) extends StockValuationVariable {
-  def withMarginOfSafety(marginOfSafetyPercent: Float) =
-    ExpectedGrowthRatePercent(1 + value * (1 - marginOfSafetyPercent))
+final case class ExpectedGrowthRatePercent(annualGrowthPercent: Percent) extends StockValuationVariable {
+  def withMarginOfSafety(marginOfSafetyPercent: Percent) =
+    ExpectedGrowthRatePercent(annualGrowthPercent * (1f - marginOfSafetyPercent.toDecimal))
 
   def fiveYearGrowth(): ExpectedGrowthRatePercent =
-    ExpectedGrowthRatePercent(Math.pow(value, 5).floatValue())
+    ExpectedGrowthRatePercent(Math.pow(annualGrowthPercent.toGrowthDecimal, 5).floatValue())
 }
 
