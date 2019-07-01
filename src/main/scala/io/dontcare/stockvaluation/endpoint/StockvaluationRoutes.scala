@@ -4,7 +4,7 @@ import cats.effect.Sync
 import cats.implicits._
 import io.dontcare.stockvaluation.api.morningstar.MorningStarApi
 import io.dontcare.stockvaluation.api.yahoo.YahooApi
-import io.dontcare.stockvaluation.entity.{AvgFiveYearPE, EarningsPerShare, ExpectedGrowthRate, StockTicker}
+import io.dontcare.stockvaluation.entity.{AvgFiveYearPE, EarningsPerShare, ExpectedGrowthRatePercent, StockTicker}
 import io.dontcare.stockvaluation.service.StockValuationCalculator
 import org.http4s.HttpRoutes
 import org.http4s.dsl.Http4sDsl
@@ -41,8 +41,8 @@ object StockvaluationRoutes {
 
           valuation = stockValuator.priceEarningsMultiple(
             fiveYearAveragePE,
-            EarningsPerShare(eps),
-            ExpectedGrowthRate(growthRate.growth.raw)
+            EarningsPerShare(eps.trailingEps.raw),
+            ExpectedGrowthRatePercent(growthRate.growth.raw)
           )
         } yield valuation
 

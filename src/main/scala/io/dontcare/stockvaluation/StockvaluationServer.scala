@@ -29,7 +29,7 @@ object StockvaluationServer {
       // TODO: Read from configs
       yahooAlg = YahooApi.impl[F](client)
 
-      stockValuator = StockValuationCalculator.impl(7.5f)
+      stockValuator = StockValuationCalculator.impl(0.25f)
 
       httpApp = StockvaluationRoutes.stockValueRoutes[F](morningStarAlg, yahooAlg, stockValuator).orNotFound
 

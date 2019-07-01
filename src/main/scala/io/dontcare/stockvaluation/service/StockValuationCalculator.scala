@@ -5,7 +5,7 @@ import io.dontcare.stockvaluation.entity._
 trait StockValuationCalculator {
   def priceEarningsMultiple(avgFiveYearPE: AvgFiveYearPE,
                             earningsPerShare: EarningsPerShare,
-                            expectedGrowthRate: ExpectedGrowthRate): StockValuationResult
+                            expectedGrowthRate: ExpectedGrowthRatePercent): StockValuationResult
 }
 
 object StockValuationCalculator {
@@ -14,9 +14,17 @@ object StockValuationCalculator {
 
     def priceEarningsMultiple(avgFiveYearPE: AvgFiveYearPE,
                               earningsPerShare: EarningsPerShare,
-                              expectedGrowthRate: ExpectedGrowthRate): StockValuationResult = {
+                              expectedGrowthRate: ExpectedGrowthRatePercent): StockValuationResult = {
+      println(s"Avg PE: $avgFiveYearPE")
+      println(s"EPS: $earningsPerShare")
+      println(s"Growth: $expectedGrowthRate")
+
+
+      val fiveYearValue = avgFiveYearPE.value * earningsPerShare.value * expectedGrowthRate.withMarginOfSafety(marginOfSafety).fiveYearGrowth().value
+      val todayIntrinsicValue = fiveYearValue / Math.pow(1.1f, 5).toFloat // TODO: Hardcoded discount 10%, get historical returns instead and calculate based on that
       StockValuationResult(
-        avgFiveYearPE * earningsPerShare * expectedGrowthRate.withMarginOfSafety(marginOfSafety).fiveYearGrowth()
+        fiveYearValue,
+        todayIntrinsicValue
       )
     }
   }

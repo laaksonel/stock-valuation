@@ -1,7 +1,8 @@
 package io.dontcare.stockvaluation.entity
 
 import cats.Applicative
-import io.circe.{Encoder, Json}
+import io.circe.Encoder
+import io.circe.generic.semiauto._
 import org.http4s.EntityEncoder
 import org.http4s.circe._
 
@@ -9,33 +10,24 @@ final case class StockTicker(ticker: String) extends AnyVal {
   override def toString: String = ticker
 }
 
-final case class StockValuationResult(value: Float) extends AnyVal {
-  def *(variable: StockValuationVariable) = variable.value * value
-}
+final case class StockValuationResult(fiveYearFutureValue: Float, todayIntrinsicValue: Float)
 
 object StockValuationResult {
-  implicit val stockValuationResultEncode: Encoder[StockValuationResult] = new Encoder[StockValuationResult] {
-    override def apply(a: StockValuationResult): Json = Json.obj(
-      // TODO: Fix this, return error message instead of null
-      ("stockValuationResult", Json.fromFloat(a.value).getOrElse(Json.Null)),
-    )
-  }
+  implicit val stockValuationResultEncode: Encoder[StockValuationResult] =
+    deriveEncoder[StockValuationResult]
   implicit def stockResultEntityEncoder[F[_]: Applicative]: EntityEncoder[F, StockValuationResult] =
     jsonEncoderOf[F, StockValuationResult]
 }
 
-abstract class StockValuationVariable {
-  def value: Float
-  def *(variable: StockValuationVariable) = StockValuationResult(variable.value * value)
-}
+sealed trait StockValuationVariable
 
 final case class AvgFiveYearPE(value: Float) extends StockValuationVariable
 final case class EarningsPerShare(value: Float) extends StockValuationVariable
-final case class ExpectedGrowthRate(value: Float) extends StockValuationVariable {
-  def withMarginOfSafety(marginOfSafety: Float) =
-    ExpectedGrowthRate(1 + value * marginOfSafety)
+final case class ExpectedGrowthRatePercent(value: Float) extends StockValuationVariable {
+  def withMarginOfSafety(marginOfSafetyPercent: Float) =
+    ExpectedGrowthRatePercent(1 + value * (1 - marginOfSafetyPercent))
 
-  def fiveYearGrowth(): ExpectedGrowthRate =
-    ExpectedGrowthRate(Math.pow(value, 5).floatValue())
+  def fiveYearGrowth(): ExpectedGrowthRatePercent =
+    ExpectedGrowthRatePercent(Math.pow(value, 5).floatValue())
 }
 
