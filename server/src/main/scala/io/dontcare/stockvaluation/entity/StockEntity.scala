@@ -10,6 +10,12 @@ final case class StockTicker(ticker: String) extends AnyVal {
   override def toString: String = ticker
 }
 
+object StockTicker {
+  implicit class StringTicker(val value: String) extends AnyVal {
+    def asTicker: StockTicker = StockTicker(value)
+  }
+}
+
 final case class StockValuationResult(fiveYearFutureValue: Float, todayIntrinsicValue: Float)
 
 object StockValuationResult {
