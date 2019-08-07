@@ -1,19 +1,15 @@
 package io.dontcare.stockvaluation
 
-import cats.effect.{ConcurrentEffect, ContextShift, IO, Timer}
-import cats.implicits._
-import fs2.Stream
-import org.http4s.client.blaze.BlazeClientBuilder
-import org.http4s.implicits._
-import org.http4s.server.blaze.BlazeServerBuilder
-import org.http4s.server.middleware.Logger
+import cats.effect.{ConcurrentEffect, ContextShift, Timer}
 import fs2.Stream
 import io.dontcare.stockvaluation.api.morningstar.MorningStarApi
 import io.dontcare.stockvaluation.api.yahoo.YahooApi
 import io.dontcare.stockvaluation.endpoint.StockvaluationRoutes
-import io.dontcare.stockvaluation.entity.StockTicker
 import io.dontcare.stockvaluation.service.StockValuationCalculator
-import org.http4s.Uri
+import org.http4s.client.blaze.BlazeClientBuilder
+import org.http4s.implicits._
+import org.http4s.server.blaze.BlazeServerBuilder
+import org.http4s.server.middleware.Logger
 
 import scala.concurrent.ExecutionContext.global
 
@@ -33,7 +29,7 @@ object StockvaluationServer {
 
       httpApp = StockvaluationRoutes.stockValueRoutes[F](morningStarAlg, yahooAlg, stockValuator).orNotFound
 
-      finalHttpApp = Logger.httpApp(true, true)(httpApp)
+      finalHttpApp = Logger.httpApp(logHeaders = true, logBody = true)(httpApp)
 
       exitCode <- BlazeServerBuilder[F]
         .bindHttp(8080, "0.0.0.0")

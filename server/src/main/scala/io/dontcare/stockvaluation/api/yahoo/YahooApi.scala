@@ -9,6 +9,8 @@ import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.dontcare.stockvaluation.api.{MissingEarningsPerShare, MissingFiveYearEstimate}
 import io.dontcare.stockvaluation.api.yahoo.Period.Period
 import io.dontcare.stockvaluation.api.yahoo.YahooApi.{DefaultKeyStatistics, EarningsEstimate}
+import io.dontcare.stockvaluation.api.yahoo.entity.{YahooQuote, YahooSearchResponse}
+import io.dontcare.stockvaluation.endpoint.StockValuationError
 import io.dontcare.stockvaluation.entity.StockTicker
 import org.http4s.Method._
 import org.http4s._
@@ -45,6 +47,7 @@ object Period extends Enumeration {
 trait YahooApi[F[_]] {
   def getEarningsPerShare(ticker: StockTicker): EitherT[F, MissingEarningsPerShare, DefaultKeyStatistics]
   def getExpectedGrowthRate(ticker: StockTicker): EitherT[F, MissingFiveYearEstimate, EarningsEstimate]
+  def getStockSuggestions(searchTerm: String): EitherT[F, StockValuationError,YahooSearchResponse]
 }
 
 object YahooApi {
@@ -139,6 +142,12 @@ object YahooApi {
               .pure[F]
         }
       }
+    }
+
+    def getStockSuggestions(searchTerm: String): EitherT[F, StockValuationError,YahooSearchResponse] = {
+      EitherT.liftF(Sync[F].delay(
+        YahooSearchResponse(Seq(YahooQuote(Some("NVIDIA LONG"), "EQUITY", "NVIDIA SHORT", "NVDA")))
+      ))
     }
   }
 }
