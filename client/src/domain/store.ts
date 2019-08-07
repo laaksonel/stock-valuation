@@ -1,11 +1,13 @@
-import { createStore, combineReducers, compose, applyMiddleware } from 'redux';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { IAppState } from './app.reducer';
-import search from './stock-search/search.reducer'
+import searchReducer from './stock-search/search.reducer'
+import stockReducer from './stock-valuation/stock.reducer'
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 
 const rootReducer = combineReducers<IAppState>({
-  search: search,
+  search: searchReducer,
+  stock: stockReducer,
 });
 
 const store = (initialState?: IAppState) =>
