@@ -10,3 +10,9 @@ object Percent {
   implicit def toFloat(p: Percent): Float = p.value
   implicit def toPercent(f: Float): Percent = Percent(f)
 }
+
+object PercentInt {
+  implicit class PercentInt(val self: Int) extends AnyVal {
+    def percent: Percent = Percent(self)
+  }
+}
