@@ -1,5 +1,11 @@
 package io.dontcare.stockvaluation.api.yahoo.entity
 
+import cats.effect.Sync
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
+import io.circe.{Decoder, Encoder}
+import org.http4s.EntityDecoder
+import org.http4s.circe._
+
 object YahooQuoteTypes extends Enumeration {
   type YahooQuoteTypes = Value
 
@@ -18,8 +24,17 @@ case class YahooQuote(longname: Option[String],
                       shortname: String,
                       symbol: String)
 
-case class YahooSearchResponse(quotes: Seq[YahooQuote]) {
-  def error = Some("Search failed")
-  def as[T](implicit f: YahooSearchResponse => T): T = f(this)
+object YahooQuote {
+  implicit val decodeYahooQuote: Decoder[YahooQuote] = deriveDecoder[YahooQuote]
 }
 
+case class YahooSuggestionResponse(quotes: Seq[YahooQuote]) {
+  def as[T](implicit f: YahooSuggestionResponse => T): T = f(this)
+}
+
+object YahooSuggestionResponse {
+  implicit val decodeStockSuggestion: Decoder[YahooSuggestionResponse] = deriveDecoder[YahooSuggestionResponse]
+
+  implicit def stockSuggestionEntityDecoder[F[_]: Sync]: EntityDecoder[F, YahooSuggestionResponse] =
+    jsonOf[F, YahooSuggestionResponse]
+}

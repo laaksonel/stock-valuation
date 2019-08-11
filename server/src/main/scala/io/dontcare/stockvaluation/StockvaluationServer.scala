@@ -18,7 +18,6 @@ object StockvaluationServer {
   def stream[F[_]: ConcurrentEffect](implicit T: Timer[F], C: ContextShift[F]): Stream[F, Nothing] = {
     for {
       client <- BlazeClientBuilder[F](global).stream
-//      helloWorldAlg = HelloWorld.impl[F]
       morningStarAlg = MorningStarApi.impl[F](client)
 
       // TODO: Read from configs

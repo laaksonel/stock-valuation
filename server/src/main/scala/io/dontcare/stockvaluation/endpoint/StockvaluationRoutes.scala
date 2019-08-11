@@ -2,6 +2,7 @@ package io.dontcare.stockvaluation.endpoint
 
 import cats.effect.Sync
 import cats.implicits._
+import io.dontcare.stockvaluation.api.YahooSuggestionError
 import io.dontcare.stockvaluation.api.morningstar.MorningStarApi
 import io.dontcare.stockvaluation.api.yahoo.YahooApi
 import io.dontcare.stockvaluation.api.yahoo.entity.StockTimeInterval
@@ -12,6 +13,9 @@ import org.http4s.dsl.Http4sDsl
 import org.http4s.dsl.impl.QueryParamDecoderMatcher
 import org.jsoup.Jsoup
 
+sealed trait HttpResponse
+final case class StockValuationError(msg: String) extends HttpResponse
+
 object StockvaluationRoutes {
 
   def stockValueRoutes[F[_]: Sync](M: MorningStarApi[F],
@@ -20,9 +24,9 @@ object StockvaluationRoutes {
     object SearchTermQueryParamMatcher extends QueryParamDecoderMatcher[String]("searchTerm")
     val dsl = new Http4sDsl[F]{}
 
-    import io.dontcare.stockvaluation.service.YahooMapper._
     import StockTicker._
     import dsl._
+    import io.dontcare.stockvaluation.service.YahooMapper._
 
     def getStockValuation(ticker: StockTicker) = {
       val result = for {
@@ -60,7 +64,7 @@ object StockvaluationRoutes {
       result.value.flatMap {
         case Right(valuation) =>
           Ok(valuation.as[Seq[StockSuggestion]])
-        case Left(StockValuationError(msg)) =>
+        case Left(YahooSuggestionError(msg)) =>
           InternalServerError(msg)
       }
     }

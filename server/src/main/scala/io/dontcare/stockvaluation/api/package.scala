@@ -10,6 +10,8 @@ package object api {
     def asErrorResponse(): StockValuationError = StockValuationError(msg)
   }
 
+  final case class YahooSuggestionError(msg: String = "Could not fetch suggestions") extends ApiError
+
   final case class MissingFiveYearEstimate(ticker: StockTicker, msg: String = "Could not find 5-year estimate") extends ApiError
   final case class MissingEarningsPerShare(ticker: StockTicker, msg: String = "Could not find earnings per share") extends ApiError
   final case class MissingAverageFiveYearPE(ticker: StockTicker, msg: String = "Could not find average 5-year PE") extends ApiError

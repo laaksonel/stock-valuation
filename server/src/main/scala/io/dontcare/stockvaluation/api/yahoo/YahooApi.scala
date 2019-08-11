@@ -3,10 +3,9 @@ package io.dontcare.stockvaluation.api.yahoo
 import cats.data.EitherT
 import cats.effect.Sync
 import cats.implicits._
+import io.dontcare.stockvaluation.api._
 import io.dontcare.stockvaluation.api.yahoo.entity.StockTimeInterval.StockTimeInterval
 import io.dontcare.stockvaluation.api.yahoo.entity._
-import io.dontcare.stockvaluation.api.{MissingEarningsPerShare, MissingFiveYearEstimate}
-import io.dontcare.stockvaluation.endpoint.StockValuationError
 import io.dontcare.stockvaluation.entity.StockTicker
 import org.http4s.Method._
 import org.http4s._
@@ -17,7 +16,7 @@ import org.http4s.client.middleware.FollowRedirect
 trait YahooApi[F[_]] {
   def getEarningsPerShare(ticker: StockTicker): EitherT[F, MissingEarningsPerShare, DefaultKeyStatistics]
   def getExpectedGrowthRate(ticker: StockTicker, timeInterval: StockTimeInterval): EitherT[F, MissingFiveYearEstimate, EarningsEstimate]
-  def getStockSuggestions(searchTerm: String): EitherT[F, StockValuationError,YahooSearchResponse]
+  def getStockSuggestions(searchTerm: String): EitherT[F, YahooSuggestionError,YahooSuggestionResponse]
 }
 
 object YahooApi {
@@ -61,10 +60,18 @@ object YahooApi {
       }
     }
 
-    def getStockSuggestions(searchTerm: String): EitherT[F, StockValuationError,YahooSearchResponse] = {
-      EitherT.liftF(Sync[F].delay(
-        YahooSearchResponse(Seq(YahooQuote(Some("NVIDIA LONG"), "EQUITY", "NVIDIA SHORT", "NVDA")))
-      ))
+    def getStockSuggestions(searchTerm: String): EitherT[F, YahooSuggestionError, YahooSuggestionResponse] = {
+      val suggestionUrl = Uri.fromString(s"https://query1.finance.yahoo.com/v1/finance/search?q=$searchTerm")
+
+      EitherT {
+        suggestionUrl match {
+          case Right(uri) =>
+            C.expect[YahooSuggestionResponse](GET(uri)).map(Right(_))
+          case _ =>
+            Either.left[YahooSuggestionError, YahooSuggestionResponse](YahooSuggestionError())
+              .pure[F]
+        }
+      }
     }
   }
 }

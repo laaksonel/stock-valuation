@@ -1,11 +1,9 @@
 package io.dontcare.stockvaluation.api.morningstar
 
-import cats.data.{EitherT, OptionT}
-import cats.Applicative
 import cats.data.EitherT
 import cats.effect.Sync
 import cats.implicits._
-import io.dontcare.stockvaluation.api.{ApiError, MissingAverageFiveYearPE}
+import io.dontcare.stockvaluation.api.MissingAverageFiveYearPE
 import io.dontcare.stockvaluation.entity.StockTicker
 import org.http4s.Method._
 import org.http4s._
@@ -26,7 +24,7 @@ object MorningStarApi {
 
     // TODO: Change this to use JSON API
     // https://api-global.morningstar.com/sal-service/v1/stock/valuation/v3/0P000001R1
-    // Before this, it's needed to be figured out where to get the shareClassId
+    // Before this, it's needed to be figured out where to get the shareClassId required by Morningstar API (0P000001R1 in the example URL)
     def getCurrentValuationPage(ticker: StockTicker): EitherT[F, MissingAverageFiveYearPE, String] = {
       // TODO: Move url to config
       val eitherUri = Uri.fromString(s"http://financials.morningstar.com/valuate/current-valuation-list.action?&t=$ticker")
