@@ -1,13 +1,13 @@
-package io.dontcare.stockvaluation
+package io.dontcare.stockvaluation.endpoint
 
 import cats.data.EitherT
 import cats.effect.IO
 import cats.implicits._
+import io.dontcare.stockvaluation.api
 import io.dontcare.stockvaluation.api.morningstar.MorningStarApi
 import io.dontcare.stockvaluation.api.yahoo.YahooApi
 import io.dontcare.stockvaluation.api.yahoo.entity.StockTimeInterval.StockTimeInterval
 import io.dontcare.stockvaluation.api.yahoo.entity._
-import io.dontcare.stockvaluation.endpoint.StockvaluationRoutes
 import io.dontcare.stockvaluation.entity.StockTicker
 import io.dontcare.stockvaluation.service.StockValuationCalculator
 import org.http4s._
