@@ -23,7 +23,15 @@ export interface IStockState {
   selectedStockData?: StockData;
 }
 
-export default (state: IStockState = {}, action: IStockAction): IStockState => {
+const dummyStock = {
+  selectedStockData: {
+    eps: 123,
+    fiveYearPE: 456,
+    expectedGrowth: 789,
+  }
+}
+
+export default (state: IStockState = dummyStock, action: IStockAction): IStockState => {
   switch(action.type) {
     case UPDATE_SELECTED_STOCK_SUCCESS:
       return {

@@ -21,7 +21,11 @@ const DefaultTheme = {
 class App extends React.Component<StateProps> {
   public render() {
     const currentView = this.props.selectedStockData
-      ? <StockValuationPage />
+      ? <StockValuationPage
+          valuationData={this.props.selectedStockData}
+          discount={10}
+          marginOfSafety={10}
+        />
       : <span>No stock currently selected</span>;
 
     return (
