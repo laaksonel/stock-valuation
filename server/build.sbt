@@ -38,3 +38,29 @@ scalacOptions ++= Seq(
   "-Ypartial-unification",
   "-Xfatal-warnings",
 )
+
+enablePlugins(sbtdocker.DockerPlugin, JavaAppPackaging)
+
+dockerfile in docker := {
+  val appDir: File = stage.value
+  val targetDir = "/app"
+
+  new Dockerfile {
+    expose(8080)
+
+    from("openjdk:8-jre-alpine")
+    entryPoint(s"$targetDir/bin/${executableScriptName.value}")
+    copy(appDir, targetDir, chown = "daemon:daemon")
+  }
+}
+
+imageNames in docker := Seq(
+  // Sets the latest tag
+  ImageName(s"${organization.value}/${name.value}:latest"),
+
+  ImageName(
+    namespace = Some(organization.value),
+    repository = name.value,
+    tag = Some("v" + version.value)
+  )
+)
