@@ -8,7 +8,7 @@ const MeasurementContainer = styled.div`
 interface IStockMeasurementBox {
   title: string;
   valueName: string;
-  currentValue: number;
+  initialValue: number;
   onChange: (newValue: number) => void;
 }
 
@@ -23,7 +23,7 @@ export default class StockMeasurementBox extends React.Component<IStockMeasureme
   public render() {
     const {
       title,
-      currentValue,
+      initialValue: currentValue,
       valueName,
     } = this.props;
 

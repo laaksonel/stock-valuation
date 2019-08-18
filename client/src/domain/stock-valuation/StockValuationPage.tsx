@@ -5,20 +5,34 @@ import StockMeasurementBox from '../../core/component/StockMeasurementBox';
 import styled from 'styled-components';
 import StockValuationResult from './result/StockValuationResult';
 import { StockData } from './stock.reducer';
+import Slider from '../../core/component/Slider';
 
-const MainInputContainer = styled.div`
+const StockDataContainer = styled.div`
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  padding-bottom: 2%;
+  border-bottom: 1px solid black;
 `;
 
-const MeasurementBoxContainer = styled.div`
-  width: 50%;
+const InputContainer = styled.div`
   display: flex;
+  flex-direction: column;
+  width: 75%;
+  align-self: center;
+`
+
+const MeasurementBoxContainer = styled(InputContainer)`
+  flex-direction: row;
   justify-content: space-between;
+  align-self: center;
 `;
 
 export interface StockValuationParams {
   valuationData: StockData;
+  multipliers: StockValuationMultipliers;
+}
+
+interface StockValuationMultipliers {
   discount: number;
   marginOfSafety: number;
 }
@@ -44,28 +58,49 @@ class StockValuationPage extends React.Component<StockValuationParams, StockValu
     });
   }
 
+  private onMultipliersChange = (key: keyof StockValuationMultipliers, value: number) => {
+    const multipliers = {
+      ...this.state.multipliers,
+      [key]: value,
+    };
+
+    this.setState({
+      ...this.state,
+      multipliers,
+    });
+  }
+
   public render() {
-    const stockData = this.state.valuationData;
+    const {
+      valuationData,
+      multipliers,
+    }= this.state
 
     const buildDataInput = (k: keyof StockData) =>
-      createMeasurement(k, stockData[k], this.replaceValuationData);
+      createMeasurement(k, valuationData[k], this.replaceValuationData);
 
-    const stockDataInputs = Object.keys(stockData)
+    const stockDataInputs = Object.keys(valuationData)
       .map((k) => k as keyof StockData) // This holds as long as Object.keys is used
       .map((k) => buildDataInput(k));
 
+    const multiplierSliders = Object.keys(multipliers)
+      .map((k) => k as keyof StockValuationMultipliers)
+      .map((k) => createMultiplierSliders(k, multipliers[k], this.onMultipliersChange));
+
     return (
       <React.Fragment>
-        <MainInputContainer>
+        <StockDataContainer>
           <MeasurementBoxContainer>
             { stockDataInputs }
           </MeasurementBoxContainer>
-        </MainInputContainer>
+          <InputContainer>
+            { multiplierSliders }
+          </InputContainer>
+        </StockDataContainer>
 
         <StockValuationResult
-          valuationData={this.state.valuationData}
-          discount={this.state.discount}
-          marginOfSafety={this.state.marginOfSafety}
+          valuationData={valuationData}
+          multipliers={multipliers}
         />
       </React.Fragment>
     );
@@ -73,17 +108,29 @@ class StockValuationPage extends React.Component<StockValuationParams, StockValu
 };
 
 type StockDataKey = keyof StockData;
-
-function createMeasurement(key: StockDataKey, currentValue: number, callback: (k: StockDataKey, v: number) => void) {
+function createMeasurement(key: StockDataKey, initialValue: number, callback: (k: StockDataKey, v: number) => void) {
   return (
     <StockMeasurementBox
+      key={key}
       title={translations[key]}
       valueName={key}
-      currentValue={currentValue}
+      initialValue={initialValue}
       onChange={(x) => callback(key, x)}
     />
   );
 }
+
+type StockMultiplierKey = keyof StockValuationMultipliers
+function createMultiplierSliders(key: StockMultiplierKey, initialValue: number, callback: (k: StockMultiplierKey, v: number) => void) {
+  return (
+    <Slider
+      key={key}
+      initialValue={initialValue}
+      name='marginOfSafety'
+      onChange={(x) => callback(key, x)} />
+  );
+}
+
 
 type TranslationDictionary = {
   [_: string]: string
