@@ -30,7 +30,7 @@ object StockvaluationServer {
       finalHttpApp = Logger.httpApp(logHeaders = true, logBody = true)(httpApp)
 
       exitCode <- BlazeServerBuilder[F]
-        .bindHttp(8080, "0.0.0.0")
+        .bindHttp(sys.env("PORT").toInt, "0.0.0.0")
         .withHttpApp(finalHttpApp)
         .serve
     } yield exitCode

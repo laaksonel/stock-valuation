@@ -46,11 +46,11 @@ dockerfile in docker := {
   val targetDir = "/app"
 
   new Dockerfile {
-    expose(8080)
+//    expose(8080)
 
-    from("openjdk:8-jre-alpine")
-    entryPoint(s"$targetDir/bin/${executableScriptName.value}")
+    from("openjdk:8-jre")
     copy(appDir, targetDir, chown = "daemon:daemon")
+    cmd(s"$targetDir/bin/${executableScriptName.value}")
   }
 }
 
