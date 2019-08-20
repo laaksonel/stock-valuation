@@ -1,12 +1,12 @@
 import { StockData } from "../../domain/stock-valuation/stock.reducer";
 import { StockValuationParams } from "../../domain/stock-valuation/StockValuationPage";
 
-export interface StockValuationResult {
+export interface StockValuation {
   valueInFiveYears: number;
   todayIntrinsicValue: number;
 }
 
-export function calculateValuation(valuationInputs: StockValuationParams) {
+export function calculateValuation(valuationInputs: StockValuationParams): StockValuation {
   const {
     valuationData,
     multipliers

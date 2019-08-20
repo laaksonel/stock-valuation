@@ -2,9 +2,17 @@ import * as React from 'react';
 import { StockData } from '../stock.reducer';
 import { StockValuationParams } from '../StockValuationPage';
 import { ResultSection, ResultContainer, ValueContainer, MainTitle, Value, ValueName, FinalEstimate } from './resultStyles';
+import { calculateValuation, StockValuation } from '../../../core/service/valueCalculation';
 
 
 export default class StockValuationResult extends React.Component<StockValuationParams> {
+  private readonly valuation: StockValuation;
+
+  constructor(props: StockValuationParams) {
+    super(props);
+    this.valuation = calculateValuation(props);
+  }
+
   public render() {
     return (
       <ResultSection>
@@ -12,11 +20,11 @@ export default class StockValuationResult extends React.Component<StockValuation
             <MainTitle>Estimates</MainTitle>
             <ValueContainer>
               <ValueName>Five years</ValueName>
-              <Value>$999</Value>
+              <Value>{ this.valuation.valueInFiveYears }</Value>
             </ValueContainer>
             <ValueContainer>
               <ValueName>Today</ValueName>
-              <Value>$999</Value>
+              <Value>{ this.valuation.todayIntrinsicValue }</Value>
             </ValueContainer>
           </ResultContainer>
 
