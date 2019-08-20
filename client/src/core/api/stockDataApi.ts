@@ -2,11 +2,6 @@ import StockAxios from './stockAxios'
 import { StockData } from '../../domain/stock-valuation/stock.reducer';
 
 export async function getStockData(stockTicker: string) {
-  const response = await StockAxios.get<StockData>('/data', {
-    params: {
-      symbol: stockTicker,
-    },
-  });
-
+  const response = await StockAxios.get<StockData>(`/valuation/${stockTicker}`);
   return response.data;
 }
