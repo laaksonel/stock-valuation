@@ -7,43 +7,39 @@ export interface StockData {
   expectedGrowth: number;
 }
 
+export type StockDataResponse = StockData & { currentPrice: number; };
+
 // Actions
 const UPDATE_SELECTED_STOCK_SUCCESS = 'stock/update-selected-stock';
 
 interface UpdateSelectedStockSuccess {
   type: typeof UPDATE_SELECTED_STOCK_SUCCESS;
-  payload: StockData;
+  payload: StockDataResponse;
 }
 
 export type IStockAction =
   | UpdateSelectedStockSuccess;
 
-// State
 export interface IStockState {
   selectedStockData?: StockData;
+  currentPrice?: number;
 }
-
-// const dummyStock = {
-//   selectedStockData: {
-//     eps: 123,
-//     fiveYearPE: 456,
-//     expectedGrowth: 789,
-//   }
-// }
 
 export default (state: IStockState = {}, action: IStockAction): IStockState => {
   switch(action.type) {
     case UPDATE_SELECTED_STOCK_SUCCESS:
+      const { currentPrice, ...data } = action.payload;
       return {
         ...state,
-        selectedStockData: action.payload
+        selectedStockData: data,
+        currentPrice: currentPrice
       }
     default:
       return state;
   }
 }
 
-function updateStockDataSuccess(data: StockData): IStockAction {
+function updateStockDataSuccess(data: StockDataResponse): IStockAction {
   return {
     type: UPDATE_SELECTED_STOCK_SUCCESS,
     payload: data

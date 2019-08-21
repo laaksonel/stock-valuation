@@ -1,6 +1,4 @@
 import * as React from 'react';
-import { IAppState } from '../app.reducer';
-import { connect } from 'react-redux';
 import StockMeasurementBox from '../../core/component/StockMeasurementBox';
 import styled from 'styled-components';
 import StockValuationResult from './result/StockValuationResult';
@@ -29,6 +27,7 @@ const MeasurementBoxContainer = styled(InputContainer)`
 
 export interface StockValuationParams {
   valuationData: StockData;
+  currentPrice: number;
   multipliers: StockValuationMultipliers;
 }
 
@@ -74,6 +73,7 @@ class StockValuationPage extends React.Component<StockValuationParams, StockValu
     const {
       valuationData,
       multipliers,
+      currentPrice
     }= this.state
 
     const buildDataInput = (k: keyof StockData) =>
@@ -100,6 +100,7 @@ class StockValuationPage extends React.Component<StockValuationParams, StockValu
 
         <StockValuationResult
           valuationData={valuationData}
+          currentPrice={currentPrice}
           multipliers={multipliers}
         />
       </React.Fragment>
@@ -138,8 +139,8 @@ type TranslationDictionary = {
 
 const translations: TranslationDictionary = {
   eps: 'EPS',
-  expectedGrowth: 'Expected growth',
-  fiveYearPE: 'Five year PE',
+  expectedGrowthRatePercent: 'Expected growth',
+  averageFiveYearPE: 'Five year PE',
 }
 
 export default StockValuationPage;

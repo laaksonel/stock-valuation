@@ -7,6 +7,9 @@ import StockValuationPage from './domain/stock-valuation/StockValuationPage';
 import { IAppState } from './domain/app.reducer';
 import { connect } from 'react-redux';
 
+const DefaultTheme = {
+  backgroundColor: '#E5E5E5'
+}
 
 const GlobalStyle = createGlobalStyle<typeof DefaultTheme>`
   body {
@@ -14,15 +17,12 @@ const GlobalStyle = createGlobalStyle<typeof DefaultTheme>`
   }
 `
 
-const DefaultTheme = {
-  backgroundColor: '#E5E5E5'
-}
-
 class App extends React.Component<StateProps> {
   public render() {
-    const currentView = this.props.selectedStockData
+    const currentView = this.props.selectedStockData && this.props.currentPrice
       ? <StockValuationPage
           valuationData={this.props.selectedStockData}
+          currentPrice={this.props.currentPrice}
           multipliers= {{
             discount: 10,
             marginOfSafety: 10

@@ -1,4 +1,3 @@
-import { StockData } from "../../domain/stock-valuation/stock.reducer";
 import { StockValuationParams } from "../../domain/stock-valuation/StockValuationPage";
 
 export interface StockValuation {
