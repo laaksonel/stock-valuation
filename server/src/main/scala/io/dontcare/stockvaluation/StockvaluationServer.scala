@@ -12,6 +12,7 @@ import org.http4s.server.blaze.BlazeServerBuilder
 import org.http4s.server.middleware.Logger
 
 import scala.concurrent.ExecutionContext.global
+import scala.util.Try
 
 object StockvaluationServer {
 
@@ -28,9 +29,10 @@ object StockvaluationServer {
       httpApp = StockvaluationRoutes.stockValueRoutes[F](morningStarAlg, yahooAlg, stockValuator).orNotFound
 
       finalHttpApp = Logger.httpApp(logHeaders = true, logBody = true)(httpApp)
+      port = Try(sys.env("PORT").toInt)
 
       exitCode <- BlazeServerBuilder[F]
-        .bindHttp(sys.env("PORT").toInt, "0.0.0.0")
+        .bindHttp(port.getOrElse(8080), "0.0.0.0")
         .withHttpApp(finalHttpApp)
         .serve
     } yield exitCode
