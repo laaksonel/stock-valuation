@@ -13,17 +13,22 @@ export default class StockValuationResult extends React.Component<StockValuation
   }
 
   public render() {
+    const {
+      valueInFiveYears,
+      todayIntrinsicValue
+    } = this.valuation;
+
     return (
       <ResultSection>
           <ResultContainer gridArea='estimate'>
             <MainTitle>Estimates</MainTitle>
             <ValueContainer>
               <ValueName>Five years</ValueName>
-              <Value>{ this.valuation.valueInFiveYears }</Value>
+              <Value>{ valueInFiveYears }</Value>
             </ValueContainer>
             <ValueContainer>
               <ValueName>Today</ValueName>
-              <Value>{ this.valuation.todayIntrinsicValue }</Value>
+              <Value>{ todayIntrinsicValue }</Value>
             </ValueContainer>
           </ResultContainer>
 
@@ -34,7 +39,7 @@ export default class StockValuationResult extends React.Component<StockValuation
             </ValueContainer>
           </ResultContainer>
           <ResultContainer gridArea='final-estimate'>
-            <FinalEstimate>Overvalued</FinalEstimate>
+            <FinalEstimate>{ this.props.currentPrice < todayIntrinsicValue ? 'Undervalued' : 'Overvalued' }</FinalEstimate>
           </ResultContainer>
       </ResultSection>
     );

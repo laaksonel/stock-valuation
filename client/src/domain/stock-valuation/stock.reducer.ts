@@ -3,8 +3,8 @@ import { ThunkDispatch } from "redux-thunk";
 
 export interface StockData {
   eps: number;
-  fiveYearPE: number;
-  expectedGrowth: number;
+  averageFiveYearPE: number;
+  expectedGrowthRatePercent: number;
 }
 
 export type StockDataResponse = StockData & { currentPrice: number; };

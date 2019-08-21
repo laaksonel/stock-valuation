@@ -13,16 +13,16 @@ export function calculateValuation(valuationInputs: StockValuationParams): Stock
 
   const {
     eps,
-    fiveYearPE,
-    expectedGrowth
+    averageFiveYearPE,
+    expectedGrowthRatePercent,
   } = valuationData;
 
-  const growthWithMarginOfSafety = expectedGrowth * (1 - multipliers.marginOfSafety);
-  const asFiveYearGrowth = Math.pow(growthWithMarginOfSafety, 5);
-  const result = fiveYearPE * eps * asFiveYearGrowth;
+  const growthWithMarginOfSafety = (100 * expectedGrowthRatePercent) * (1 - multipliers.marginOfSafety / 100);
+  const asFiveYearGrowth = Math.pow(1 + (growthWithMarginOfSafety / 100), 5);
+  const result = averageFiveYearPE * eps * asFiveYearGrowth;
 
   return {
     valueInFiveYears: result,
-    todayIntrinsicValue: result / Math.pow(1 + multipliers.discount, 5)
+    todayIntrinsicValue: result / Math.pow(1 + multipliers.discount / 100, 5)
   }
 }
