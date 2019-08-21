@@ -17,6 +17,7 @@ trait YahooApi[F[_]] {
   def getEarningsPerShare(ticker: StockTicker): EitherT[F, MissingEarningsPerShare, DefaultKeyStatistics]
   def getExpectedGrowthRate(ticker: StockTicker, timeInterval: StockTimeInterval): EitherT[F, MissingFiveYearEstimate, EarningsEstimate]
   def getStockSuggestions(searchTerm: String): EitherT[F, YahooSuggestionError,YahooSuggestionResponse]
+  def getCurrentPrice(ticker: StockTicker): EitherT[F, YahooSummaryError, YahooSummary]
 }
 
 object YahooApi {
@@ -55,6 +56,19 @@ object YahooApi {
             }
           case _ =>
             Either.left[MissingFiveYearEstimate, EarningsEstimate](MissingFiveYearEstimate(ticker))
+              .pure[F]
+        }
+      }
+    }
+
+    def getCurrentPrice(ticker: StockTicker): EitherT[F, YahooSummaryError, YahooSummary] = {
+      val priceUrl = Uri.fromString(s"https://query1.finance.yahoo.com/v7/finance/quote?symbols=$ticker")
+      EitherT {
+        priceUrl match {
+          case Right(uri) =>
+            C.expect[YahooSummary](GET(uri)).map(Right(_))
+          case _ =>
+            Either.left[YahooSummaryError, YahooSummary](YahooSummaryError(ticker))
               .pure[F]
         }
       }

@@ -37,3 +37,15 @@ final case class ExpectedGrowthRatePercent(annualGrowthPercent: Percent) extends
     ExpectedGrowthRatePercent(Math.pow(annualGrowthPercent.toGrowthDecimal, 5).floatValue())
 }
 
+final case class StockData(averageFiveYearPE: Float,
+                           eps: Float,
+                           expectedGrowthRatePercent: Float,
+                           currentPrice: Float)
+
+object StockData {
+  implicit val stockDataEncoder: Encoder[StockData] =
+    deriveEncoder[StockData]
+
+  implicit def stockDataEntityEncoder[F[_]: Applicative]: EntityEncoder[F, StockData] =
+    jsonEncoderOf
+}

@@ -11,6 +11,7 @@ package object api {
   }
 
   final case class YahooSuggestionError(msg: String = "Could not fetch suggestions") extends ApiError
+  final case class YahooSummaryError(ticker: StockTicker, msg: String = "Could not fetch summary details") extends ApiError
 
   final case class MissingFiveYearEstimate(ticker: StockTicker, msg: String = "Could not find 5-year estimate") extends ApiError
   final case class MissingEarningsPerShare(ticker: StockTicker, msg: String = "Could not find earnings per share") extends ApiError

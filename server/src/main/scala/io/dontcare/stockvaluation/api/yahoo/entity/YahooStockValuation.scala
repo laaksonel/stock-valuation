@@ -85,3 +85,16 @@ object DefaultKeyStatistics {
 
 final case class EarningsEstimateError(e: Throwable) extends RuntimeException
 
+final case class YahooSummary(regularMarketPrice: Float)
+
+object YahooSummary {
+  implicit val decodeSummary: Decoder[YahooSummary] =
+    deriveDecoder[YahooSummary].prepare(
+      _.downField("quoteResponse")
+        .downField("result")
+        .downArray
+    )
+
+  implicit def summaryEntityDecoder[F[_]: Sync]: EntityDecoder[F, YahooSummary] =
+    jsonOf[F, YahooSummary]
+}

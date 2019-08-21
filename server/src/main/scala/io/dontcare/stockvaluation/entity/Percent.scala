@@ -1,4 +1,5 @@
 package io.dontcare.stockvaluation.entity
+
 import scala.language.implicitConversions
 
 case class Percent(value: Float) extends AnyVal {

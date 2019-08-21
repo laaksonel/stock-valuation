@@ -5,7 +5,7 @@ import cats.implicits._
 import io.dontcare.stockvaluation.api.YahooSuggestionError
 import io.dontcare.stockvaluation.api.morningstar.MorningStarApi
 import io.dontcare.stockvaluation.api.yahoo.YahooApi
-import io.dontcare.stockvaluation.api.yahoo.entity.StockTimeInterval
+import io.dontcare.stockvaluation.api.yahoo.entity.{StockTimeInterval, YahooSummary}
 import io.dontcare.stockvaluation.entity._
 import io.dontcare.stockvaluation.service.StockValuationCalculator
 import org.http4s.HttpRoutes
@@ -28,12 +28,13 @@ object StockvaluationRoutes {
     import dsl._
     import io.dontcare.stockvaluation.service.YahooMapper._
 
-    def getStockValuation(ticker: StockTicker) = {
+    def getStockData(ticker: StockTicker) = {
       val result = for {
         // TODO: Cache the external values
-        growthRate  <- Y.getExpectedGrowthRate(ticker, StockTimeInterval.plusFiveYears).leftMap(_.asErrorResponse())
-        htmlContent <- M.getCurrentValuationPage(ticker).leftMap(_.asErrorResponse())
-        eps         <- Y.getEarningsPerShare(ticker).leftMap(_.asErrorResponse())
+        growthRate   <- Y.getExpectedGrowthRate(ticker, StockTimeInterval.plusFiveYears).leftMap(_.asErrorResponse())
+        htmlContent  <- M.getCurrentValuationPage(ticker).leftMap(_.asErrorResponse())
+        eps          <- Y.getEarningsPerShare(ticker).leftMap(_.asErrorResponse())
+        currentPrice <- Y.getCurrentPrice(ticker).leftMap(_.asErrorResponse())
 
         fiveYearAveragePE = AverageFiveYearPE(
           Jsoup.parse(htmlContent)
@@ -42,12 +43,10 @@ object StockvaluationRoutes {
             .toFloat
         )
 
-        valuation = stockValuator.priceEarningsMultiple(
-          fiveYearAveragePE,
-          EarningsPerShare(eps.trailingEps.raw),
-          ExpectedGrowthRatePercent(growthRate.growth.raw)
-        )
-      } yield valuation
+      } yield StockData(fiveYearAveragePE.value,
+                        eps.trailingEps.raw,
+                        growthRate.growth.raw,
+                        currentPrice.regularMarketPrice)
 
       result.value.flatMap {
         case Right(valuation) => Ok(valuation)
@@ -72,8 +71,8 @@ object StockvaluationRoutes {
     HttpRoutes.of[F] {
       case GET -> Root / "api" / "suggestions" :? SearchTermQueryParamMatcher(searchTerm) =>
         getStockSuggestions(searchTerm)
-      case GET -> Root / "api" / "valuation" / stockTicker =>
-        getStockValuation(stockTicker.asTicker)
+      case GET -> Root / "api" / "data" / stockTicker =>
+        getStockData(stockTicker.asTicker)
     }
   }
 }
