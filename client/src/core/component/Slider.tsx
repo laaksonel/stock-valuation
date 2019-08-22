@@ -6,6 +6,7 @@ export const SliderContainer = styled.div`
 export const CommonInput = styled.input`
   box-sizing: border-box;
   width: 100%;
+  height: 100%;
 `
 
 interface SliderProps {

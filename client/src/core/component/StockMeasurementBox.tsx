@@ -1,5 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
+import { InputHeader, Input } from '../theme/stockTheme';
 
 const MeasurementContainer = styled.div`
   display: inline-block;
@@ -29,8 +30,10 @@ export default class StockMeasurementBox extends React.Component<IStockMeasureme
 
     return (
       <MeasurementContainer>
-        <div>{title}</div>
-        <input type='number'
+        <InputHeader>{title}</InputHeader>
+        <Input
+          width='150px'
+          type='number'
           name={valueName}
           value={currentValue}
           onChange={this.changeValue}

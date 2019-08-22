@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { StockValuationParams } from '../StockValuationPage';
 import { ResultSection, ResultContainer, ValueContainer, MainTitle, Value, ValueName, FinalEstimate } from './resultStyles';
 import { calculateValuation, StockValuation } from '../../../core/service/valueCalculation';
+import { StockValuationParams } from '../../stockEntity';
 
 
 export default class StockValuationResult extends React.Component<StockValuationParams> {
