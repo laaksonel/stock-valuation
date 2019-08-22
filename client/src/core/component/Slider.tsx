@@ -1,10 +1,10 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
-const SliderContainer = styled.div`
-  display: block;
+export const SliderContainer = styled.div`
 `
-const SliderStyle = styled.input`
+export const CommonInput = styled.input`
+  box-sizing: border-box;
   width: 100%;
 `
 
@@ -41,7 +41,7 @@ export default class Slider extends React.Component<SliderProps, SlideState> {
   public render() {
     return (
       <SliderContainer>
-        <SliderStyle 
+        <CommonInput 
           type="range"
           name={this.props.name}
           min={0}

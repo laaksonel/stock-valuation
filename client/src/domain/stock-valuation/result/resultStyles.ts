@@ -20,7 +20,7 @@ export const ResultSection = styled.div`
     'estimate final-estimate'
 `
 
-export const MainTitle = styled.text`
+export const MainTitle = styled.span`
   font-size: 32px;
 `
 export const ValueContainer = styled.div`

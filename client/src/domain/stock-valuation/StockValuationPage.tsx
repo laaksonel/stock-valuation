@@ -3,7 +3,7 @@ import StockMeasurementBox from '../../core/component/StockMeasurementBox';
 import styled from 'styled-components';
 import StockValuationResult from './result/StockValuationResult';
 import { StockData } from './stock.reducer';
-import Slider from '../../core/component/Slider';
+import Slider, { CommonInput, SliderContainer } from '../../core/component/Slider';
 
 const StockDataContainer = styled.div`
   display: flex;
@@ -121,17 +121,36 @@ function createMeasurement(key: StockDataKey, initialValue: number, callback: (k
   );
 }
 
+const MultiplierContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  ${SliderContainer} {
+    flex-grow: 1;
+  }
+`
+const MultiplierInputContainer = styled.div`
+  width: 10%;
+  margin-left: 5%;
+  box-sizing: border-box;
+`
+
 type StockMultiplierKey = keyof StockValuationMultipliers
 function createMultiplierSliders(key: StockMultiplierKey, initialValue: number, callback: (k: StockMultiplierKey, v: number) => void) {
   return (
-    <Slider
-      key={key}
-      initialValue={initialValue}
-      name='marginOfSafety'
-      onChange={(x) => callback(key, x)} />
+    <div key={key}>
+      <h4>{ translations[key] }</h4>
+      <MultiplierContainer>
+        <Slider
+          initialValue={initialValue}
+          name={key}
+          onChange={(x) => callback(key, x)} />
+        <MultiplierInputContainer>
+          <CommonInput type='numeric' />
+        </MultiplierInputContainer>
+      </MultiplierContainer>
+    </div>
   );
 }
-
 
 type TranslationDictionary = {
   [_: string]: string
@@ -141,6 +160,8 @@ const translations: TranslationDictionary = {
   eps: 'EPS',
   expectedGrowthRatePercent: 'Expected growth',
   averageFiveYearPE: 'Five year PE',
+  marginOfSafety: 'Margin of safety',
+  discount: 'Discount'
 }
 
 export default StockValuationPage;

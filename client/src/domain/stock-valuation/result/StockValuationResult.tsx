@@ -5,14 +5,18 @@ import { calculateValuation, StockValuation } from '../../../core/service/valueC
 
 
 export default class StockValuationResult extends React.Component<StockValuationParams> {
-  private readonly valuation: StockValuation;
+  private valuation: StockValuation;
 
   constructor(props: StockValuationParams) {
     super(props);
     this.valuation = calculateValuation(props);
   }
 
-  public render() {
+  componentWillUpdate() {
+    this.valuation = calculateValuation(this.props);
+  }
+
+  render() {
     const {
       valueInFiveYears,
       todayIntrinsicValue
@@ -24,11 +28,11 @@ export default class StockValuationResult extends React.Component<StockValuation
             <MainTitle>Estimates</MainTitle>
             <ValueContainer>
               <ValueName>Five years</ValueName>
-              <Value>{ valueInFiveYears }</Value>
+              <Value>{ valueInFiveYears.toFixed(2) }</Value>
             </ValueContainer>
             <ValueContainer>
               <ValueName>Today</ValueName>
-              <Value>{ todayIntrinsicValue }</Value>
+              <Value>{ todayIntrinsicValue.toFixed(2) }</Value>
             </ValueContainer>
           </ResultContainer>
 
@@ -39,7 +43,11 @@ export default class StockValuationResult extends React.Component<StockValuation
             </ValueContainer>
           </ResultContainer>
           <ResultContainer gridArea='final-estimate'>
-            <FinalEstimate>{ this.props.currentPrice < todayIntrinsicValue ? 'Undervalued' : 'Overvalued' }</FinalEstimate>
+            <FinalEstimate>{
+              this.props.currentPrice < todayIntrinsicValue
+                ? 'Undervalued'
+                : 'Overvalued' 
+            }</FinalEstimate>
           </ResultContainer>
       </ResultSection>
     );
