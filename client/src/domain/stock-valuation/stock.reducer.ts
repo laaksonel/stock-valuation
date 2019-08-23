@@ -1,5 +1,5 @@
-import { getStockData } from "../../core/api/stockDataApi";
-import { ThunkDispatch } from "redux-thunk";
+import { getStockData } from '../../core/api/stockDataApi';
+import { ThunkDispatch } from 'redux-thunk';
 
 export interface StockData {
   eps: number;
@@ -26,23 +26,23 @@ export interface IStockState {
 }
 
 export default (state: IStockState = {}, action: IStockAction): IStockState => {
-  switch(action.type) {
+  switch (action.type) {
     case UPDATE_SELECTED_STOCK_SUCCESS:
       const { currentPrice, ...data } = action.payload;
       return {
         ...state,
+        currentPrice,
         selectedStockData: data,
-        currentPrice: currentPrice
-      }
+      };
     default:
       return state;
   }
-}
+};
 
 function updateStockDataSuccess(data: StockDataResponse): IStockAction {
   return {
     type: UPDATE_SELECTED_STOCK_SUCCESS,
-    payload: data
+    payload: data,
   };
 }
 
@@ -53,8 +53,8 @@ export function fetchStockData(stockTicker: string) {
     try {
       const data = await getStockData(stockTicker);
       dispatch(updateStockDataSuccess(data));
-    } catch(err) {
-      console.log(err);
+    } catch (err) {
+      console.error(err);
     }
-  }
+  };
 }

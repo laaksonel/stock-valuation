@@ -4,7 +4,7 @@ import { InputHeader, Input } from '../theme/stockTheme';
 
 const MeasurementContainer = styled.div`
   display: inline-block;
-`
+`;
 
 interface IStockMeasurementBox {
   title: string;
@@ -32,8 +32,8 @@ export default class StockMeasurementBox extends React.Component<IStockMeasureme
       <MeasurementContainer>
         <InputHeader>{title}</InputHeader>
         <Input
-          width='150px'
-          type='number'
+          width="150px"
+          type="number"
           name={valueName}
           value={currentValue}
           onChange={this.changeValue}

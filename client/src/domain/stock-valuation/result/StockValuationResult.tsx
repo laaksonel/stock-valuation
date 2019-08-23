@@ -1,8 +1,15 @@
 import * as React from 'react';
-import { ResultSection, ResultContainer, ValueContainer, MainTitle, Value, ValueName, FinalEstimate } from './resultStyles';
+import {
+  ResultSection,
+  ResultContainer,
+  ValueContainer,
+  MainTitle,
+  Value,
+  ValueName,
+  FinalEstimate,
+} from './resultStyles';
 import { calculateValuation, StockValuation } from '../../../core/service/valueCalculation';
 import { StockValuationParams } from '../../stockEntity';
-
 
 export default class StockValuationResult extends React.Component<StockValuationParams> {
   private valuation: StockValuation;
@@ -19,12 +26,12 @@ export default class StockValuationResult extends React.Component<StockValuation
   render() {
     const {
       valueInFiveYears,
-      todayIntrinsicValue
+      todayIntrinsicValue,
     } = this.valuation;
 
     return (
       <ResultSection>
-          <ResultContainer gridArea='estimate'>
+          <ResultContainer gridArea="estimate">
             <MainTitle>Estimates</MainTitle>
             <ValueContainer>
               <ValueName>Five years</ValueName>
@@ -36,17 +43,17 @@ export default class StockValuationResult extends React.Component<StockValuation
             </ValueContainer>
           </ResultContainer>
 
-          <ResultContainer gridArea='current-price'>
+          <ResultContainer gridArea="current-price">
             <ValueContainer>
               <ValueName>Current price</ValueName>
               <Value>{ this.props.currentPrice }</Value>
             </ValueContainer>
           </ResultContainer>
-          <ResultContainer gridArea='final-estimate'>
+          <ResultContainer gridArea="final-estimate">
             <FinalEstimate>{
               this.props.currentPrice < todayIntrinsicValue
                 ? 'Undervalued'
-                : 'Overvalued' 
+                : 'Overvalued'
             }</FinalEstimate>
           </ResultContainer>
       </ResultSection>

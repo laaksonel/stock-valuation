@@ -1,11 +1,8 @@
 import * as React from 'react';
 import StockMeasurementBox from '../../core/component/StockMeasurementBox';
-import styled from 'styled-components';
 import StockValuationResult from './result/StockValuationResult';
 import { StockData } from './stock.reducer';
-import Slider, { CommonInput, SliderContainer } from '../../core/component/Slider';
-import { MultiplierContainer, MultiplierInputContainer, StockDataContainer, InputContainer, MeasurementBoxContainer } from './stockInputStyles';
-import { InputHeader, Input } from '../../core/theme/stockTheme';
+import { StockDataContainer, InputContainer, MeasurementBoxContainer } from './stockInputStyles';
 import { StockValuationParams, StockMultiplierKey } from '../stockEntity';
 import { translations } from '../stockTranslation';
 import MultiplierSlider from './slider/MultiplierSlider';
@@ -14,8 +11,8 @@ class StockValuationPage extends React.Component<StockValuationParams, StockValu
   constructor(props: StockValuationParams) {
     super(props);
     this.state = {
-      ...props
-    }
+      ...props,
+    };
   }
 
   private replaceValuationData = (key: keyof StockData, value: number) => {
@@ -46,19 +43,19 @@ class StockValuationPage extends React.Component<StockValuationParams, StockValu
     const {
       valuationData,
       multipliers,
-      currentPrice
-    }= this.state
+      currentPrice,
+    } = this.state;
 
     const buildDataInput = (k: keyof StockData) =>
       createMeasurement(k, valuationData[k], this.replaceValuationData);
 
     const stockDataInputs = Object.keys(valuationData)
-      .map((k) => k as keyof StockData) // This holds as long as Object.keys is used
-      .map((k) => buildDataInput(k));
+      .map(k => k as keyof StockData) // This holds as long as Object.keys is used
+      .map(k => buildDataInput(k));
 
     const multiplierSliders = Object.keys(multipliers)
-      .map((k) => k as StockMultiplierKey)
-      .map((k) => createMultiplierSliders(k, multipliers[k], this.onMultipliersChange));
+      .map(k => k as StockMultiplierKey)
+      .map(k => createMultiplierSliders(k, multipliers[k], this.onMultipliersChange));
 
     return (
       <React.Fragment>
@@ -79,7 +76,7 @@ class StockValuationPage extends React.Component<StockValuationParams, StockValu
       </React.Fragment>
     );
   }
-};
+}
 
 type StockDataKey = keyof StockData;
 function createMeasurement(key: StockDataKey, initialValue: number, callback: (k: StockDataKey, v: number) => void) {
@@ -89,12 +86,16 @@ function createMeasurement(key: StockDataKey, initialValue: number, callback: (k
       title={translations[key]}
       valueName={key}
       initialValue={initialValue}
-      onChange={(x) => callback(key, x)}
+      onChange={x => callback(key, x)}
     />
   );
 }
 
-function createMultiplierSliders(key: StockMultiplierKey, initialValue: number, callback: (k: StockMultiplierKey, v: number) => void) {
+function createMultiplierSliders(
+  key: StockMultiplierKey,
+  initialValue: number,
+  callback: (k: StockMultiplierKey, v: number) => void,
+) {
   return (
     <MultiplierSlider
       initialValue={initialValue}

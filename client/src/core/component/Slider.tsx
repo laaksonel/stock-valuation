@@ -2,12 +2,12 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 export const SliderContainer = styled.div`
-`
+`;
 export const CommonInput = styled.input`
   box-sizing: border-box;
   width: 100%;
   height: 100%;
-`
+`;
 
 interface SliderProps {
   name: string;
@@ -25,7 +25,7 @@ export default class Slider extends React.Component<SliderProps, SlideState> {
     super(props);
     this.state = {
       value: props.initialValue,
-    }
+    };
   }
 
   onValueChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,14 +35,14 @@ export default class Slider extends React.Component<SliderProps, SlideState> {
     }
 
     this.setState({
-      value
+      value,
     });
   }
 
   public render() {
     return (
       <SliderContainer>
-        <CommonInput 
+        <CommonInput
           type="range"
           name={this.props.name}
           min={0}

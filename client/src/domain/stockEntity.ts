@@ -1,4 +1,4 @@
-import { StockData } from "./stock-valuation/stock.reducer";
+import { StockData } from './stock-valuation/stock.reducer';
 
 export interface StockValuationParams {
   valuationData: StockData;
@@ -11,4 +11,4 @@ export interface StockValuationMultipliers {
   marginOfSafety: number;
 }
 
-export type StockMultiplierKey = keyof StockValuationMultipliers
+export type StockMultiplierKey = keyof StockValuationMultipliers;

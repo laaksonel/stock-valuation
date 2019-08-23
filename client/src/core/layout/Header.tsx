@@ -13,7 +13,7 @@ const MainLabel = styled.div`
   font-weight: 500;
   font-size: 2rem;
   padding-left: 1rem;
-`
+`;
 
 interface IHeader {
   label: string;

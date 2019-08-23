@@ -8,7 +8,7 @@ import { translations } from '../../stockTranslation';
 interface MultiplierSliderProps {
   initialValue: number;
   sliderId: StockMultiplierKey;
-  updateMultipliers: (k: StockMultiplierKey, v: number) => void
+  updateMultipliers: (k: StockMultiplierKey, v: number) => void;
 }
 
 interface MultiplierSliderState {
@@ -27,12 +27,12 @@ export default class MultiplierSlider extends React.Component<MultiplierSliderPr
     super(props);
     this.state = {
       currentValue: props.initialValue,
-    }
+    };
   }
 
   render() {
     const {
-      sliderId: key, 
+      sliderId: key,
     } = this.props;
 
     return (
@@ -46,11 +46,11 @@ export default class MultiplierSlider extends React.Component<MultiplierSliderPr
           />
           <MultiplierInputContainer>
             <Input
-              placeholder='%'
-              width='100%'
-              type='numeric'
-              value={this.state.currentValue} 
-              onChange={(ev) => this.updateValues(+ev.target.value)}
+              placeholder="%"
+              width="100%"
+              type="numeric"
+              value={this.state.currentValue}
+              onChange={(ev: React.ChangeEvent<HTMLInputElement>) => this.updateValues(+ev.target.value)}
             />
           </MultiplierInputContainer>
         </MultiplierContainer>

@@ -1,4 +1,4 @@
-import StockAxios from './stockAxios'
+import StockAxios from './stockAxios';
 import { StockDataResponse } from '../../domain/stock-valuation/stock.reducer';
 
 export async function getStockData(stockTicker: string) {

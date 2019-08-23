@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { CSSProperties } from "react";
+import styled from 'styled-components';
+import { CSSProperties } from 'react';
 
 export const SearchBoxDiv = styled.div`
     align-self: center;
@@ -23,7 +23,7 @@ export const SearchBoxDiv = styled.div`
         'Arial',
       ].join(',')
     }
-`
+`;
 
 export const SuggestionDiv = styled.div`
   color: black;
@@ -44,7 +44,7 @@ export const searchBarTheme = {
     width: '100%',
   },
   inputFocused: {
-    outline: 'none'
+    outline: 'none',
   },
   container: {
     display: 'flex',
@@ -71,8 +71,8 @@ export const searchBarTheme = {
 
 export const SuggestionInfo = styled.div`
     display: inline-block
-`
+`;
 
 export const SuggestionSymbol = styled(SuggestionInfo)`
   width: 25%
-`
+`;

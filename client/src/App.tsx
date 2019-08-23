@@ -8,14 +8,14 @@ import { IAppState } from './domain/app.reducer';
 import { connect } from 'react-redux';
 
 const DefaultTheme = {
-  backgroundColor: '#E5E5E5'
-}
+  backgroundColor: '#E5E5E5',
+};
 
 const GlobalStyle = createGlobalStyle<typeof DefaultTheme>`
   body {
     background-color: ${props => props.backgroundColor};
   }
-`
+`;
 
 class App extends React.Component<StateProps> {
   public render() {
@@ -25,7 +25,7 @@ class App extends React.Component<StateProps> {
           currentPrice={this.props.currentPrice}
           multipliers= {{
             discount: 10,
-            marginOfSafety: 10
+            marginOfSafety: 10,
           }}
         />
       : <span>No stock currently selected</span>;
@@ -33,7 +33,7 @@ class App extends React.Component<StateProps> {
     return (
       <Fragment>
           <GlobalStyle {...DefaultTheme} />
-          <Header label='Stock valuator'>
+          <Header label="Stock valuator">
             <TickerSearch />
           </Header>
           <MainContent>

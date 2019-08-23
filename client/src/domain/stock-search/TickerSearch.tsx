@@ -18,10 +18,13 @@ const renderSuggestion = (s: StockSuggestion) => (
 
 const getSuggestionValue = (s: StockSuggestion) => s.shortName;
 
-interface ITickerSearch extends StateProps, DispatchProps { };
+interface ITickerSearch extends StateProps, DispatchProps { }
 
 class TickerSearch extends React.PureComponent<ITickerSearch> {
-  private onSuggestionSelected = (_: React.FormEvent, data: Autosuggest.SuggestionSelectedEventData<StockSuggestion>) => {
+  private onSuggestionSelected = (
+    _: React.FormEvent,
+    data: Autosuggest.SuggestionSelectedEventData<StockSuggestion>,
+  ) => {
     this.props.fetchStockData(data.suggestion.symbol);
   }
 
@@ -29,21 +32,21 @@ class TickerSearch extends React.PureComponent<ITickerSearch> {
     return (
       <SearchBoxDiv>
         <FaSearch />
-        <Autosuggest 
+        <Autosuggest
           theme={searchBarTheme}
           suggestions={this.props.suggestions}
           getSuggestionValue={getSuggestionValue}
           inputProps={{
             onChange: (_: FormEvent, params?: ChangeEvent | undefined) => {
               const searchValue = params && params.newValue;
-               this.props.updateSearch(searchValue || '');
+              this.props.updateSearch(searchValue || '');
             },
-            value: this.props.currentSearch
+            value: this.props.currentSearch,
           }}
           onSuggestionsFetchRequested={(currentInput) => {
             const searchValue = currentInput.value;
             if (searchValue !== '' && searchValue !== this.props.currentSearch) {
-              this.props.fetchStockSuggestions(searchValue)
+              this.props.fetchStockSuggestions(searchValue);
             }
           }}
           onSuggestionsClearRequested={this.props.clearSuggestions}
@@ -58,13 +61,13 @@ class TickerSearch extends React.PureComponent<ITickerSearch> {
 
 
 const mapStateToProps = (state: IAppState) => state.search;
-const mapDispatchToProps = (dispatch: SearchDispatch | StockDispatch) => 
+const mapDispatchToProps = (dispatch: SearchDispatch | StockDispatch) =>
   bindActionCreators({
     updateSearch,
     clearSuggestions,
     fetchStockSuggestions,
     fetchStockData,
-  }, dispatch);
+  },                 dispatch);
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = ReturnType<typeof mapDispatchToProps>;

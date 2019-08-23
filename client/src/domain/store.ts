@@ -1,7 +1,7 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { IAppState } from './app.reducer';
-import searchReducer from './stock-search/search.reducer'
-import stockReducer from './stock-valuation/stock.reducer'
+import searchReducer from './stock-search/search.reducer';
+import stockReducer from './stock-valuation/stock.reducer';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 

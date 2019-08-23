@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export interface InputProps {
   width: string;
@@ -12,9 +12,9 @@ export const Input = styled.input`
   font-size: 24px;
   width: ${(props: InputProps) => props.width};
   box-sizing: border-box;
-`
+`;
 
 export const InputHeader = styled.h4`
   margin-block-start: 10px;
   margin-block-end: 10px;
-`
+`;
