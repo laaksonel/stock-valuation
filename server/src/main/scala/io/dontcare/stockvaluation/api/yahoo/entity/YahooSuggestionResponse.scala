@@ -13,6 +13,7 @@ object YahooQuoteTypes extends Enumeration {
   val StockOption = Value("OPTION")
   val Etf    = Value("ETF")
   val Index  = Value("INDEX")
+  val Future = Value("FUTURE")
 }
 
 trait YahooApiReponse {
