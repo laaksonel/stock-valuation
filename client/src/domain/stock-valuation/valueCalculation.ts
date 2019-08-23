@@ -1,4 +1,4 @@
-import { StockValuationParams } from '../../domain/stockEntity';
+import { StockValuationParams } from '../stockEntity';
 
 export interface StockValuation {
   valueInFiveYears: number;

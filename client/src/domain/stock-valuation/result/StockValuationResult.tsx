@@ -8,8 +8,8 @@ import {
   ValueName,
   FinalEstimate,
 } from './resultStyles';
-import { calculateValuation, StockValuation } from '../../../core/service/valueCalculation';
 import { StockValuationParams } from '../../stockEntity';
+import { StockValuation, calculateValuation } from '../valueCalculation';
 
 export default class StockValuationResult extends React.Component<StockValuationParams> {
   private valuation: StockValuation;
