@@ -37,8 +37,6 @@ object StockvaluationRoutes {
             .text()
             .toFloat
         )
-
-        // TODO: Can this be mapped with N?
       } yield StockData(fiveYearAveragePE.value,
                         eps.trailingEps.raw,
                         growthRate.growth.raw,
