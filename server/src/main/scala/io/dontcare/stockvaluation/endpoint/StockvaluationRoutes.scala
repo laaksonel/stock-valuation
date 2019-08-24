@@ -7,7 +7,6 @@ import io.dontcare.stockvaluation.api.morningstar.MorningStarApi
 import io.dontcare.stockvaluation.api.yahoo.YahooApi
 import io.dontcare.stockvaluation.api.yahoo.entity.{StockTimeInterval, YahooSummary}
 import io.dontcare.stockvaluation.entity._
-import io.dontcare.stockvaluation.service.StockValuationCalculator
 import org.http4s.HttpRoutes
 import org.http4s.dsl.Http4sDsl
 import org.http4s.dsl.impl.QueryParamDecoderMatcher
@@ -19,8 +18,7 @@ final case class StockValuationError(msg: String) extends HttpResponse
 object StockvaluationRoutes {
 
   def stockValueRoutes[F[_]: Sync](M: MorningStarApi[F],
-                                   Y: YahooApi[F],
-                                   stockValuator: StockValuationCalculator): HttpRoutes[F] = {
+                                   Y: YahooApi[F]): HttpRoutes[F] = {
     object SearchTermQueryParamMatcher extends QueryParamDecoderMatcher[String]("searchTerm")
     val dsl = new Http4sDsl[F]{}
 

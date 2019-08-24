@@ -24,9 +24,7 @@ object StockvaluationServer {
       // TODO: Read from configs
       yahooAlg = YahooApi.impl[F](client)
 
-      stockValuator = StockValuationCalculator.impl(25f)
-
-      httpApp = StockvaluationRoutes.stockValueRoutes[F](morningStarAlg, yahooAlg, stockValuator).orNotFound
+      httpApp = StockvaluationRoutes.stockValueRoutes[F](morningStarAlg, yahooAlg).orNotFound
 
       finalHttpApp = Logger.httpApp(logHeaders = true, logBody = true)(httpApp)
       port = Try(sys.env("PORT").toInt)
