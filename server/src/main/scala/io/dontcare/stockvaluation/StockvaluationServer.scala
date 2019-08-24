@@ -1,13 +1,14 @@
 package io.dontcare.stockvaluation
 
 import cats.effect.{ConcurrentEffect, ContextShift, Timer}
+import cats.syntax.semigroupk._
 import fs2.Stream
 import io.dontcare.stockvaluation.api.morningstar.MorningStarApi
 import io.dontcare.stockvaluation.api.yahoo.YahooApi
-import io.dontcare.stockvaluation.endpoint.StockvaluationRoutes
-import io.dontcare.stockvaluation.service.StockValuationCalculator
+import io.dontcare.stockvaluation.endpoint.{StockSuggestionRoutes, StockvaluationRoutes}
 import org.http4s.client.blaze.BlazeClientBuilder
 import org.http4s.implicits._
+import org.http4s.server.Router
 import org.http4s.server.blaze.BlazeServerBuilder
 import org.http4s.server.middleware.Logger
 
@@ -24,7 +25,10 @@ object StockvaluationServer {
       // TODO: Read from configs
       yahooAlg = YahooApi.impl[F](client)
 
-      httpApp = StockvaluationRoutes.stockValueRoutes[F](morningStarAlg, yahooAlg).orNotFound
+      httpApp = Router(
+        "/api" -> (StockvaluationRoutes.stockValueRoutes[F](morningStarAlg, yahooAlg) <+>
+                   StockSuggestionRoutes.stockSuggestionRoutes[F](yahooAlg))
+      ).orNotFound
 
       finalHttpApp = Logger.httpApp(logHeaders = true, logBody = true)(httpApp)
       port = Try(sys.env("PORT").toInt)

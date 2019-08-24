@@ -2,14 +2,12 @@ package io.dontcare.stockvaluation.endpoint
 
 import cats.effect.Sync
 import cats.implicits._
-import io.dontcare.stockvaluation.api.YahooSuggestionError
 import io.dontcare.stockvaluation.api.morningstar.MorningStarApi
 import io.dontcare.stockvaluation.api.yahoo.YahooApi
-import io.dontcare.stockvaluation.api.yahoo.entity.{StockTimeInterval, YahooSummary}
+import io.dontcare.stockvaluation.api.yahoo.entity.StockTimeInterval
 import io.dontcare.stockvaluation.entity._
 import org.http4s.HttpRoutes
 import org.http4s.dsl.Http4sDsl
-import org.http4s.dsl.impl.QueryParamDecoderMatcher
 import org.jsoup.Jsoup
 
 sealed trait HttpResponse
@@ -19,12 +17,10 @@ object StockvaluationRoutes {
 
   def stockValueRoutes[F[_]: Sync](M: MorningStarApi[F],
                                    Y: YahooApi[F]): HttpRoutes[F] = {
-    object SearchTermQueryParamMatcher extends QueryParamDecoderMatcher[String]("searchTerm")
     val dsl = new Http4sDsl[F]{}
 
     import StockTicker._
     import dsl._
-    import io.dontcare.stockvaluation.service.YahooMapper._
 
     def getStockData(ticker: StockTicker) = {
       val result = for {
@@ -34,6 +30,7 @@ object StockvaluationRoutes {
         eps          <- Y.getEarningsPerShare(ticker).leftMap(_.asErrorResponse())
         currentPrice <- Y.getCurrentPrice(ticker).leftMap(_.asErrorResponse())
 
+        // TODO: Unnest this
         fiveYearAveragePE = AverageFiveYearPE(
           Jsoup.parse(htmlContent)
             .select(":matchesOwn(^Price/Earnings$) ~ td:eq(4)")
@@ -41,6 +38,7 @@ object StockvaluationRoutes {
             .toFloat
         )
 
+        // TODO: Can this be mapped with N?
       } yield StockData(fiveYearAveragePE.value,
                         eps.trailingEps.raw,
                         growthRate.growth.raw,
@@ -53,23 +51,8 @@ object StockvaluationRoutes {
       }
     }
 
-    def getStockSuggestions(searchTerm: String) = {
-      val result = for {
-        suggestions <- Y.getStockSuggestions(searchTerm)
-      } yield suggestions
-
-      result.value.flatMap {
-        case Right(valuation) =>
-          Ok(valuation.as[Seq[StockSuggestion]])
-        case Left(YahooSuggestionError(msg)) =>
-          InternalServerError(msg)
-      }
-    }
-
     HttpRoutes.of[F] {
-      case GET -> Root / "api" / "suggestions" :? SearchTermQueryParamMatcher(searchTerm) =>
-        getStockSuggestions(searchTerm)
-      case GET -> Root / "api" / "data" / stockTicker =>
+      case GET -> Root / "data" / stockTicker =>
         getStockData(stockTicker.asTicker)
     }
   }
