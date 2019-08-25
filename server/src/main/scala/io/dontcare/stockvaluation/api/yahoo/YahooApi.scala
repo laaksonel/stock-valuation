@@ -23,7 +23,7 @@ trait YahooApi[F[_]] {
 object YahooApi {
   def apply[F[_]](implicit ev: YahooApi[F]): YahooApi[F] = ev
 
-  def impl[F[_]: Sync](C: Client[F]): YahooApi[F] = new YahooApi[F]{
+  def impl[F[_]: Sync](config: YahooConfig, C: Client[F]): YahooApi[F] = new YahooApi[F] {
     private val dsl = new Http4sClientDsl[F]{}
     import dsl._
 
@@ -75,16 +75,11 @@ object YahooApi {
     }
 
     def getStockSuggestions(searchTerm: String): EitherT[F, YahooSuggestionError, YahooSuggestionResponse] = {
-      val suggestionUrl = Uri.fromString(s"https://query1.finance.yahoo.com/v1/finance/search?q=$searchTerm")
+      val query = config.suggestionUrl
+        .withQueryParam("q", searchTerm)
 
       EitherT {
-        suggestionUrl match {
-          case Right(uri) =>
-            C.expect[YahooSuggestionResponse](GET(uri)).map(Right(_))
-          case _ =>
-            Either.left[YahooSuggestionError, YahooSuggestionResponse](YahooSuggestionError())
-              .pure[F]
-        }
+        C.expect[YahooSuggestionResponse](GET(query)).map(Right(_))
       }
     }
   }

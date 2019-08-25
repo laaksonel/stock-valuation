@@ -6,7 +6,7 @@ import org.http4s.{Method, Request, Response, Status, _}
 import org.specs2.matcher.{JsonMatchers, JsonType, Matcher}
 
 class StockSuggestionSpec extends org.specs2.mutable.Specification with JsonMatchers {
-  "StockValuation" >> {
+  "StockSuggestion" >> {
     "returns 200" >> {
       suggestionRequest.status must beEqualTo(Status.Ok)
     }

@@ -5,6 +5,7 @@ import cats.syntax.semigroupk._
 import fs2.Stream
 import io.dontcare.stockvaluation.api.morningstar.MorningStarApi
 import io.dontcare.stockvaluation.api.yahoo.YahooApi
+import io.dontcare.stockvaluation.config.{Config, ConfigModule}
 import io.dontcare.stockvaluation.endpoint.{StockSuggestionRoutes, StockvaluationRoutes}
 import org.http4s.client.blaze.BlazeClientBuilder
 import org.http4s.implicits._
@@ -18,12 +19,14 @@ import scala.util.Try
 object StockvaluationServer {
 
   def stream[F[_]: ConcurrentEffect](implicit T: Timer[F], C: ContextShift[F]): Stream[F, Nothing] = {
+
+    val configModule = new ConfigModule {}
+
     for {
       client <- BlazeClientBuilder[F](global).stream
       morningStarAlg = MorningStarApi.impl[F](client)
 
-      // TODO: Read from configs
-      yahooAlg = YahooApi.impl[F](client)
+      yahooAlg = YahooApi.impl[F](configModule.config.yahoo, client)
 
       httpApp = Router(
         "/api" -> (StockvaluationRoutes.stockValueRoutes[F](morningStarAlg, yahooAlg) <+>
