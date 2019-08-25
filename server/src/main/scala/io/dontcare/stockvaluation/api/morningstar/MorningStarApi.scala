@@ -15,29 +15,23 @@ trait MorningStarApi[F[_]] {
 }
 
 object MorningStarApi {
+  import io.dontcare.stockvaluation.util.HttpUtils.tickerQueryParam
 
   def apply[F[_]](implicit ev: MorningStarApi[F]): MorningStarApi[F] = ev
 
-  def impl[F[_]: Sync](C: Client[F]): MorningStarApi[F] = new MorningStarApi[F]{
-    val dsl = new Http4sClientDsl[F]{}
+  def impl[F[_]: Sync](config: MorningStarConfig, C: Client[F]): MorningStarApi[F] = new MorningStarApi[F]{
+    private val dsl = new Http4sClientDsl[F]{}
     import dsl._
 
     // TODO: Change this to use JSON API
     // https://api-global.morningstar.com/sal-service/v1/stock/valuation/v3/0P000001R1
     // Before this, it's needed to be figured out where to get the shareClassId required by Morningstar API (0P000001R1 in the example URL)
     def getCurrentValuationPage(ticker: StockTicker): EitherT[F, MissingAverageFiveYearPE, String] = {
-      // TODO: Move url to config
-      val eitherUri = Uri.fromString(s"http://financials.morningstar.com/valuate/current-valuation-list.action?&t=$ticker")
+      val currentValuationUrl = config.currentValuationUrl
+        .withQueryParam("t", ticker)
 
       EitherT {
-         eitherUri match {
-          case Right(uri) =>
-            C.expect[String](GET(uri))
-             .map(Right(_))
-          case _ =>
-            Either.left[MissingAverageFiveYearPE, String](MissingAverageFiveYearPE(ticker))
-                  .pure[F]
-        }
+        C.expect[String](GET(currentValuationUrl)).map(_.asRight)
       }
     }
   }

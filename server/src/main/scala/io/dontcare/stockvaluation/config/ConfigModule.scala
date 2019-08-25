@@ -2,6 +2,7 @@ package io.dontcare.stockvaluation.config
 
 import io.dontcare.stockvaluation.api.yahoo.YahooConfig
 import com.typesafe.scalalogging.StrictLogging
+import io.dontcare.stockvaluation.api.morningstar.MorningStarConfig
 import pureconfig.generic.auto._
 
 trait ConfigModule extends StrictLogging {
@@ -13,7 +14,7 @@ trait ConfigModule extends StrictLogging {
       s"""
          |Configuration:
          |-----------------------
-         |MorningStarApi: -
+         |MorningStarApi: ${config.morningstar}
          |YahooApi:       ${config.yahoo}
          |""".stripMargin
 
@@ -22,4 +23,4 @@ trait ConfigModule extends StrictLogging {
 
 }
 
-case class Config(yahoo: YahooConfig)
+case class Config(yahoo: YahooConfig, morningstar: MorningStarConfig)

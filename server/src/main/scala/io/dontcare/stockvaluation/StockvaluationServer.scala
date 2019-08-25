@@ -25,7 +25,7 @@ object StockvaluationServer {
 
     for {
       client <- BlazeClientBuilder[F](global).stream
-      morningStarAlg = MorningStarApi.impl[F](client)
+      morningStarAlg = MorningStarApi.impl[F](configModule.config.morningstar, client)
 
       yahooAlg = YahooApi.impl[F](configModule.config.yahoo, client)
 

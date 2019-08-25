@@ -21,11 +21,9 @@ trait YahooApi[F[_]] {
 }
 
 object YahooApi {
-  def apply[F[_]](implicit ev: YahooApi[F]): YahooApi[F] = ev
+  import io.dontcare.stockvaluation.util.HttpUtils.tickerQueryParam
 
-  implicit val tickerQueryParam = new QueryParamEncoder[StockTicker] {
-    def encode(value: StockTicker): QueryParameterValue = QueryParameterValue(value.ticker)
-  }
+  def apply[F[_]](implicit ev: YahooApi[F]): YahooApi[F] = ev
 
   def impl[F[_]: Sync](config: YahooConfig, C: Client[F]): YahooApi[F] = new YahooApi[F] {
     private val dsl = new Http4sClientDsl[F]{}
