@@ -21,6 +21,7 @@ object StockvaluationServer {
   def stream[F[_]: ConcurrentEffect](implicit T: Timer[F], C: ContextShift[F]): Stream[F, Nothing] = {
 
     val configModule = new ConfigModule {}
+    configModule.logConfig()
 
     for {
       client <- BlazeClientBuilder[F](global).stream

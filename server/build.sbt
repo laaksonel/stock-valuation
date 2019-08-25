@@ -4,6 +4,7 @@ val Specs2Version = "4.7.0"
 val LogbackVersion = "1.2.3"
 val JsoupVersion = "1.12.1"
 val PureConfigVersion = "0.11.1"
+val ScalaLoggingVersion = "3.9.2"
 
 lazy val root = (project in file("."))
   .settings(
@@ -13,15 +14,16 @@ lazy val root = (project in file("."))
     scalaVersion := "2.12.8",
     scalacOptions ++= Seq("-Ypartial-unification"),
     libraryDependencies ++= Seq(
-      "org.http4s"            %% "http4s-blaze-server" % Http4sVersion,
-      "org.http4s"            %% "http4s-blaze-client" % Http4sVersion,
-      "org.http4s"            %% "http4s-circe"        % Http4sVersion,
-      "org.http4s"            %% "http4s-dsl"          % Http4sVersion,
-      "io.circe"              %% "circe-generic"       % CirceVersion,
-      "io.circe"              %% "circe-parser"        % CirceVersion,
-      "ch.qos.logback"        %  "logback-classic"     % LogbackVersion,
-      "com.github.pureconfig" %% "pureconfig"          % PureConfigVersion,
-      "org.jsoup"             %  "jsoup"               % JsoupVersion,
+      "org.http4s"                  %% "http4s-blaze-server" % Http4sVersion,
+      "org.http4s"                  %% "http4s-blaze-client" % Http4sVersion,
+      "org.http4s"                  %% "http4s-circe"        % Http4sVersion,
+      "org.http4s"                  %% "http4s-dsl"          % Http4sVersion,
+      "io.circe"                    %% "circe-generic"       % CirceVersion,
+      "io.circe"                    %% "circe-parser"        % CirceVersion,
+      "ch.qos.logback"              %  "logback-classic"     % LogbackVersion,
+      "com.github.pureconfig"       %% "pureconfig"          % PureConfigVersion,
+      "org.jsoup"                   %  "jsoup"               % JsoupVersion,
+      "com.typesafe.scala-logging"  %% "scala-logging"       % ScalaLoggingVersion,
 
       "org.specs2"      %% "specs2-core"         % Specs2Version % "test",
       "org.specs2"      %% "specs2-matcher-extra"% Specs2Version % "test",
