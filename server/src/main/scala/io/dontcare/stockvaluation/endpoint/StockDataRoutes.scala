@@ -6,9 +6,9 @@ import io.dontcare.stockvaluation.api.morningstar.MorningStarApi
 import io.dontcare.stockvaluation.api.yahoo.YahooApi
 import io.dontcare.stockvaluation.api.yahoo.entity.StockTimeInterval
 import io.dontcare.stockvaluation.entity._
+import io.dontcare.stockvaluation.service.CurrentValuationPageParser
 import org.http4s.HttpRoutes
 import org.http4s.dsl.Http4sDsl
-import org.jsoup.Jsoup
 
 sealed trait HttpResponse
 final case class StockValuationError(msg: String) extends HttpResponse
@@ -30,16 +30,10 @@ object StockvaluationRoutes {
         eps          <- Y.getEarningsPerShare(ticker).leftMap(_.asErrorResponse())
         currentPrice <- Y.getCurrentPrice(ticker).leftMap(_.asErrorResponse())
 
-        // TODO: Unnest this
-        fiveYearAveragePE = AverageFiveYearPE(
-          Jsoup.parse(htmlContent)
-            .select(":matchesOwn(^Price/Earnings$) ~ td:eq(4)")
-            .text()
-            .toFloat
-        )
-      } yield StockData(fiveYearAveragePE.value,
-                        eps.trailingEps.raw,
-                        growthRate.growth.raw,
+        fiveYearAveragePE = CurrentValuationPageParser.getAverageFiveYearPE(htmlContent)
+      } yield StockData(fiveYearAveragePE,
+                        eps.trailingEps,
+                        growthRate.growth,
                         currentPrice.regularMarketPrice)
 
       result.value.flatMap {

@@ -3,6 +3,7 @@ package io.dontcare.stockvaluation.entity
 import cats.Applicative
 import io.circe.Encoder
 import io.circe.generic.semiauto._
+import io.dontcare.stockvaluation.api.yahoo.entity.RawValue
 import org.http4s.EntityEncoder
 import org.http4s.circe._
 
@@ -43,6 +44,15 @@ final case class StockData(averageFiveYearPE: Float,
                            currentPrice: Float)
 
 object StockData {
+  def apply(averageFiveYearPE: AverageFiveYearPE,
+            trailingEps: RawValue,
+            growthRatePercent: RawValue,
+            currentPrice: Float): StockData =
+    new StockData(averageFiveYearPE.value,
+                  trailingEps.raw,
+                  growthRatePercent.raw,
+                  currentPrice)
+
   implicit val stockDataEncoder: Encoder[StockData] =
     deriveEncoder[StockData]
 
