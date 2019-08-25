@@ -5,6 +5,7 @@ import org.http4s.implicits._
 import cats.implicits._
 import pureconfig.ConfigReader
 
-
-case class YahooConfig(suggestionUrl: Uri)
+case class YahooConfig(suggestionUrl: Uri,
+                       quoteUrl: Uri,
+                       summaryUrl: Uri)
 

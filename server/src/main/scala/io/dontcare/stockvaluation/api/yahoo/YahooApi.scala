@@ -23,54 +23,42 @@ trait YahooApi[F[_]] {
 object YahooApi {
   def apply[F[_]](implicit ev: YahooApi[F]): YahooApi[F] = ev
 
+  implicit val tickerQueryParam = new QueryParamEncoder[StockTicker] {
+    def encode(value: StockTicker): QueryParameterValue = QueryParameterValue(value.ticker)
+  }
+
   def impl[F[_]: Sync](config: YahooConfig, C: Client[F]): YahooApi[F] = new YahooApi[F] {
     private val dsl = new Http4sClientDsl[F]{}
     import dsl._
 
     def getEarningsPerShare(ticker: StockTicker): EitherT[F, MissingEarningsPerShare, DefaultKeyStatistics] = {
-      val tickerUrl = Uri.fromString(s"http://query1.finance.yahoo.com/v10/finance/quoteSummary/$ticker?modules=defaultKeyStatistics")
+      val defaultKeyStatsUrl = (config.summaryUrl / ticker.toString)
+        .withQueryParam("modules", "defaultKeyStatistics")
 
       EitherT {
-        tickerUrl match {
-          case Right(uri) =>
-            FollowRedirect(1)(C).expect[DefaultKeyStatistics](GET(uri))
-              .map(Right(_))
-          case _ =>
-            Either.left[MissingEarningsPerShare, DefaultKeyStatistics](MissingEarningsPerShare(ticker))
-              .pure[F]
-        }
+        FollowRedirect(1)(C).expect[DefaultKeyStatistics](GET(defaultKeyStatsUrl))
+          .map(_.asRight)
       }
     }
 
     def getExpectedGrowthRate(ticker: StockTicker, timeInterval: StockTimeInterval): EitherT[F, MissingFiveYearEstimate, EarningsEstimate] = {
-      val tickerUrl = Uri.fromString(s"https://query1.finance.yahoo.com/v10/finance/quoteSummary/$ticker?modules=earningsTrend")
+      val earningsUrl = (config.summaryUrl / ticker.toString)
+        .withQueryParam("modules", "earningsTrend")
 
       EitherT {
-        tickerUrl match {
-          case Right(uri) =>
-            C.expect[EarningsTrend](GET(uri)).map {
-              _.trend.find(_.period == timeInterval) match {
-                case Some(estimate) => Right(estimate)
-                case None => Left(MissingFiveYearEstimate(ticker))
-              }
-            }
-          case _ =>
-            Either.left[MissingFiveYearEstimate, EarningsEstimate](MissingFiveYearEstimate(ticker))
-              .pure[F]
+        C.expect[EarningsTrend](GET(earningsUrl)).map { r =>
+          val matchingInterval = r.trend.find(_.period == timeInterval)
+          Either.fromOption(matchingInterval, MissingFiveYearEstimate(ticker))
         }
       }
     }
 
     def getCurrentPrice(ticker: StockTicker): EitherT[F, YahooSummaryError, YahooSummary] = {
-      val priceUrl = Uri.fromString(s"https://query1.finance.yahoo.com/v7/finance/quote?symbols=$ticker")
+      val priceQuery = config.quoteUrl
+        .withQueryParam("symbols", ticker)
+
       EitherT {
-        priceUrl match {
-          case Right(uri) =>
-            C.expect[YahooSummary](GET(uri)).map(Right(_))
-          case _ =>
-            Either.left[YahooSummaryError, YahooSummary](YahooSummaryError(ticker))
-              .pure[F]
-        }
+        C.expect[YahooSummary](GET(priceQuery)).map(_.asRight)
       }
     }
 
