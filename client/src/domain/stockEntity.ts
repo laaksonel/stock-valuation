@@ -3,7 +3,6 @@ import { StockData } from './stock-valuation/stock.reducer';
 export interface StockValuationParams {
   valuationData: StockData;
   currentPrice: number;
-  multipliers: StockValuationMultipliers;
 }
 
 export interface StockValuationMultipliers {

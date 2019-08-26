@@ -54,5 +54,5 @@
     "tslint": "^5.19.0",
     "tslint-config-airbnb": "^5.11.1"
   },
-  "proxy": "http://stock-valuation.herokuapp.com"
+  "proxy": "http://192.168.99.100:8080"
 }

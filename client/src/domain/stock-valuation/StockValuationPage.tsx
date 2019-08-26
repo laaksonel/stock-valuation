@@ -3,15 +3,25 @@ import StockMeasurementBox from '../../core/component/StockMeasurementBox';
 import StockValuationResult from './result/StockValuationResult';
 import { StockData } from './stock.reducer';
 import { StockDataContainer, InputContainer, MeasurementBoxContainer } from './stockInputStyles';
-import { StockValuationParams, StockMultiplierKey } from '../stockEntity';
+import { StockValuationParams, StockMultiplierKey, StockValuationMultipliers } from '../stockEntity';
 import { translations } from '../stockTranslation';
 import MultiplierSlider from './slider/MultiplierSlider';
 
-class StockValuationPage extends React.Component<StockValuationParams, StockValuationParams> {
+type ValuationPageState = {
+  multipliers: StockValuationMultipliers;
+}
+
+class StockValuationPage extends React.Component<StockValuationParams, ValuationPageState> {
   constructor(props: StockValuationParams) {
     super(props);
+    console.log('Construct');
+    const multipliers = {
+      discount: 10,
+      marginOfSafety: 10,
+    };
+
     this.state = {
-      ...props,
+      multipliers,
     };
   }
 
@@ -40,10 +50,9 @@ class StockValuationPage extends React.Component<StockValuationParams, StockValu
   }
 
   public render() {
+    console.log('render');
     const {
-      valuationData,
       multipliers,
-      currentPrice,
     } = this.state;
 
     const buildDataInput = (k: keyof StockData) =>
@@ -80,6 +89,7 @@ class StockValuationPage extends React.Component<StockValuationParams, StockValu
 
 type StockDataKey = keyof StockData;
 function createMeasurement(key: StockDataKey, initialValue: number, callback: (k: StockDataKey, v: number) => void) {
+  console.log('Create measure box', initialValue);
   return (
     <StockMeasurementBox
       key={key}

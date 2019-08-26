@@ -23,10 +23,6 @@ class App extends React.Component<StateProps> {
       ? <StockValuationPage
           valuationData={this.props.selectedStockData}
           currentPrice={this.props.currentPrice}
-          multipliers= {{
-            discount: 10,
-            marginOfSafety: 10,
-          }}
         />
       : <span>No stock currently selected</span>;
 
