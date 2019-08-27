@@ -1,11 +1,15 @@
-import { StockValuationParams } from '../stockEntity';
+import { StockValuationParams, StockValuationMultipliers } from '../stockEntity';
 
 export interface StockValuation {
   valueInFiveYears: number;
   todayIntrinsicValue: number;
 }
 
-export function calculateValuation(valuationInputs: StockValuationParams): StockValuation {
+type StockDataProps = StockValuationParams & {
+  multipliers: StockValuationMultipliers,
+};
+
+export function calculateValuation(valuationInputs: StockDataProps): StockValuation {
   const {
     valuationData,
     multipliers,

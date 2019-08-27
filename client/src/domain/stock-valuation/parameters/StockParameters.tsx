@@ -1,33 +1,41 @@
 import * as React from 'react';
-import { StockMultiplierKey, StockValuationParams } from '../../stockEntity';
+import { StockMultiplierKey, StockValuationMultipliers } from '../../stockEntity';
 import { StockData } from '../stock.reducer';
 import { StockDataContainer, InputContainer, MeasurementBoxContainer } from '../stockInputStyles';
 import StockMeasurementBox from '../../../core/component/StockMeasurementBox';
 import { translations } from '../../stockTranslation';
+import MultiplierSlider from '../slider/MultiplierSlider';
 
 interface StockParameterProps {
   onUpdateValuationData: (key: keyof StockData, value: number)    => void;
   onMultiplierChange:    (key: StockMultiplierKey, value: number) => void;
-  data: StockValuationParams;
+  data: StockData;
+  multipliers: StockValuationMultipliers;
 }
 
-export default class StockParameters extends React.Component {
+export default class StockParameters extends React.Component<StockParameterProps> {
   public render() {
     const {
-      valuationData,
+      onUpdateValuationData,
+      onMultiplierChange,
+    } = this.props;
+
+    const {
+      data,
       multipliers,
     } = this.props;
 
-    const buildDataInput = (k: keyof StockData) =>
-      createMeasurement(k, valuationData[k], this.replaceValuationData);
 
-    const stockDataInputs = Object.keys(valuationData)
+    const buildDataInput = (k: keyof StockData) =>
+      createMeasurement(k, data[k], onUpdateValuationData);
+
+    const stockDataInputs = Object.keys(data)
       .map(k => k as keyof StockData) // This holds as long as Object.keys is used
       .map(k => buildDataInput(k));
 
     const multiplierSliders = Object.keys(multipliers)
       .map(k => k as StockMultiplierKey)
-      .map(k => createMultiplierSliders(k, multipliers[k], this.onMultipliersChange));
+      .map(k => createMultiplierSliders(k, multipliers[k], onMultiplierChange));
 
     return (
       <StockDataContainer>

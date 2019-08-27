@@ -67,7 +67,7 @@ const mapDispatchToProps = (dispatch: SearchDispatch | StockDispatch) =>
     clearSuggestions,
     fetchStockSuggestions,
     fetchStockData,
-  },                 dispatch);
+  }, dispatch);
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = ReturnType<typeof mapDispatchToProps>;

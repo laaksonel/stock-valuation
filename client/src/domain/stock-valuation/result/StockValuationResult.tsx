@@ -8,13 +8,18 @@ import {
   ValueName,
   FinalEstimate,
 } from './resultStyles';
-import { StockValuationParams } from '../../stockEntity';
+import { StockValuationParams, StockValuationMultipliers } from '../../stockEntity';
 import { StockValuation, calculateValuation } from '../valueCalculation';
 
-export default class StockValuationResult extends React.Component<StockValuationParams> {
+interface StockValuationResultProps extends StockValuationParams {
+  currentPrice: number | undefined;
+  multipliers: StockValuationMultipliers;
+}
+
+export default class StockValuationResult extends React.Component<StockValuationResultProps> {
   private valuation: StockValuation;
 
-  constructor(props: StockValuationParams) {
+  constructor(props: StockValuationResultProps) {
     super(props);
     this.valuation = calculateValuation(props);
   }
@@ -49,12 +54,14 @@ export default class StockValuationResult extends React.Component<StockValuation
               <Value>{ this.props.currentPrice }</Value>
             </ValueContainer>
           </ResultContainer>
-          <ResultContainer gridArea="final-estimate">
-            <FinalEstimate>{
-              this.props.currentPrice < todayIntrinsicValue
+          <ResultContainer gridArea="final-estimate"> {
+            this.props.currentPrice &&
+             <FinalEstimate>{
+               this.props.currentPrice < todayIntrinsicValue
                 ? 'Undervalued'
                 : 'Overvalued'
             }</FinalEstimate>
+          }
           </ResultContainer>
       </ResultSection>
     );
