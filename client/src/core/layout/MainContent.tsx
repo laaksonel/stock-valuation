@@ -9,6 +9,8 @@ const MainContentDiv = styled.div`
   border-radius: 5px;
   padding: 3%;
   box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
 `;
 
 export default class MainContent extends React.Component {

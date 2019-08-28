@@ -5,7 +5,6 @@ export const StockDataContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding-bottom: 2%;
-  border-bottom: 1px solid black;
 `;
 
 export const InputContainer = styled.div`
@@ -13,6 +12,8 @@ export const InputContainer = styled.div`
   flex-direction: column;
   width: 75%;
   align-self: center;
+  padding-top: 2%;
+  padding-bottom: 2%;
 `;
 
 export const MeasurementBoxContainer = styled(InputContainer)`

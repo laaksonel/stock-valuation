@@ -17,4 +17,6 @@ export const Input = styled.input`
 export const InputHeader = styled.h4`
   margin-block-start: 10px;
   margin-block-end: 10px;
+  font-weight: normal;
+  font-size: 20px;
 `;

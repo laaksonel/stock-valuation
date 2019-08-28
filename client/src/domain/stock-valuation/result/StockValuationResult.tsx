@@ -40,18 +40,18 @@ export default class StockValuationResult extends React.Component<StockValuation
             <MainTitle>Estimates</MainTitle>
             <ValueContainer>
               <ValueName>Five years</ValueName>
-              <Value>{ valueInFiveYears.toFixed(2) }</Value>
+              <Value>${ valueInFiveYears.toFixed(2) }</Value>
             </ValueContainer>
             <ValueContainer>
               <ValueName>Today</ValueName>
-              <Value>{ todayIntrinsicValue.toFixed(2) }</Value>
+              <Value>${ todayIntrinsicValue.toFixed(2) }</Value>
             </ValueContainer>
           </ResultContainer>
 
           <ResultContainer gridArea="current-price">
             <ValueContainer>
               <ValueName>Current price</ValueName>
-              <Value>{ this.props.currentPrice }</Value>
+              <Value>${ this.props.currentPrice }</Value>
             </ValueContainer>
           </ResultContainer>
           <ResultContainer gridArea="final-estimate"> {

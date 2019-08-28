@@ -24,7 +24,7 @@ class App extends React.Component {
             <TickerSearch />
           </Header>
           <MainContent>
-          <StockValuationPage />
+            <StockValuationPage />
           </MainContent>
       </Fragment>
     );
