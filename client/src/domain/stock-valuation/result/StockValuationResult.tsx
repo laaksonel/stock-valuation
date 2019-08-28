@@ -54,16 +54,28 @@ export default class StockValuationResult extends React.Component<StockValuation
               <Value>${ this.props.currentPrice }</Value>
             </ValueContainer>
           </ResultContainer>
-          <ResultContainer gridArea="final-estimate"> {
-            this.props.currentPrice &&
-             <FinalEstimate>{
-               this.props.currentPrice < todayIntrinsicValue
-                ? 'Undervalued'
-                : 'Overvalued'
-            }</FinalEstimate>
-          }
+          <ResultContainer gridArea="final-estimate">
+            { createFinalEstimate(this.props.currentPrice, todayIntrinsicValue) }
           </ResultContainer>
       </ResultSection>
     );
   }
 }
+
+const createFinalEstimate = (currentPrice: number | undefined, todayIntrinsicValue: number) => {
+  if (currentPrice) {
+    const isUndervalued = currentPrice < todayIntrinsicValue;
+    return (
+      <FinalEstimate color={isUndervalued ? 'green' : 'red'}>
+      {
+          isUndervalued
+            ? 'Undervalued'
+            : 'Overvalued'
+      }
+      </FinalEstimate>
+    );
+  }
+
+  return null;
+};
+

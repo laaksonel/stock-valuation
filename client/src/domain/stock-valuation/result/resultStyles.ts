@@ -39,8 +39,13 @@ export const Value = styled.div`
   font-weight: bold;
 `;
 
+interface ColorProp {
+  color: string;
+}
+
 export const FinalEstimate = styled.div`
   font-size: 48px;
   text-align: center;
   grid-area: final-estimate;
+  color: ${(props: ColorProp) => props.color}
 `;
