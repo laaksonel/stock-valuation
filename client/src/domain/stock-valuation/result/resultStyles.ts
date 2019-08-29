@@ -6,9 +6,10 @@ export interface ResultContainerProps {
 
 export const ResultContainer = styled.div`
   border: 1px solid #CCCCCC;
+  border-radius: 2px;
   grid-area: ${(props: ResultContainerProps) => props.gridArea };
   margin-top: 5%;
-  padding: 4%;
+  padding: 5.5%;
 `;
 
 export const ResultSection = styled.div`
@@ -28,7 +29,8 @@ export const MainTitle = styled.span`
   font-size: 32px;
 `;
 export const ValueContainer = styled.div`
-
+  padding-top: 2%;
+  padding-bottom: 2%;
 `;
 export const ValueName = styled.div`
   font-size: 20px;

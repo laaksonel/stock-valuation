@@ -3,8 +3,8 @@ import styled from 'styled-components';
 
 const MainContentDiv = styled.div`
   margin-top: 4rem;
-  margin-right: 12rem;
-  margin-left: 12rem;
+  margin-right: 28rem;
+  margin-left: 28rem;
   background-color: white;
   border-radius: 5px;
   padding: 3%;
