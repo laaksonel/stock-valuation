@@ -7,6 +7,7 @@ import {
   Value,
   ValueName,
   FinalEstimate,
+  FinalResultContainer,
 } from './resultStyles';
 import { StockValuationParams, StockValuationMultipliers } from '../../stockEntity';
 import { StockValuation, calculateValuation } from '../valueCalculation';
@@ -54,9 +55,9 @@ export default class StockValuationResult extends React.Component<StockValuation
               <Value>${ this.props.currentPrice }</Value>
             </ValueContainer>
           </ResultContainer>
-          <ResultContainer gridArea="final-estimate">
+          <FinalResultContainer gridArea="final-estimate">
             { createFinalEstimate(this.props.currentPrice, todayIntrinsicValue) }
-          </ResultContainer>
+          </FinalResultContainer>
       </ResultSection>
     );
   }

@@ -32,7 +32,17 @@ export interface IStockState {
   currentPrice?: number;
 }
 
-export default (state: IStockState = {}, action: IStockAction): IStockState => {
+
+const dummyStock: IStockState = {
+  currentStockData: {
+    eps: 9.99,
+    averageFiveYearPE: 11.1,
+    expectedGrowthRatePercent: 0.111,
+  },
+  currentPrice: 100,
+};
+
+export default (state: IStockState = dummyStock, action: IStockAction): IStockState => {
   switch (action.type) {
     case FETCH_SELECTED_STOCK_SUCCESS:
       const { currentPrice, ...data } = action.payload;

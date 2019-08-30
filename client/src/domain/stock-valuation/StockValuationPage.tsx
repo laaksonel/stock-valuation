@@ -6,6 +6,8 @@ import StockParameters from './parameters/StockParameters';
 import { IAppState } from '../app.reducer';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import styled from 'styled-components';
+import { device } from '../../core/theme/stockTheme';
 
 interface StockValuationProps extends StateProps, DispatchProps { }
 interface StockValuationState {
@@ -53,7 +55,7 @@ class StockValuationPage extends React.Component<StockValuationProps, StockValua
     } = this.props;
 
     return currentStockData && (
-      <React.Fragment>
+      <PageContainer>
         <StockParameters
           data={currentStockData}
           onMultiplierChange={this.onMultipliersChange}
@@ -66,10 +68,25 @@ class StockValuationPage extends React.Component<StockValuationProps, StockValua
           currentPrice={currentPrice}
           multipliers={this.state.multipliers}
         />
-      </React.Fragment>
+      </PageContainer>
     ) || null;
   }
 }
+
+const PageContainer = styled.div`
+  width: 100%;
+
+  @media ${device.mobileL} {
+    width: 50%;
+  }
+
+  background-color: white;
+  border-radius: 5px;
+  padding: 3%;
+  box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+`;
 
 const mapDispatchToProps = (dispatch: StockDispatch) =>
   bindActionCreators({

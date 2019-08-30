@@ -18,7 +18,7 @@ const GlobalStyle = createGlobalStyle<typeof DefaultTheme>`
 class App extends React.Component {
   public render() {
     return (
-      <Fragment>
+      <>
           <GlobalStyle {...DefaultTheme} />
           <Header label="Stock valuator">
             <TickerSearch />
@@ -26,7 +26,7 @@ class App extends React.Component {
           <MainContent>
             <StockValuationPage />
           </MainContent>
-      </Fragment>
+      </>
     );
   }
 }

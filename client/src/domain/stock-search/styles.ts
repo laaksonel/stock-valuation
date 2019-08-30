@@ -19,8 +19,7 @@ export const SearchBoxDiv = styled.div`
     font-family: ${
       [
         'Roboto',
-        'Helvetica Neue',
-        'Arial',
+        'sans-serif',
       ].join(',')
     }
 `;

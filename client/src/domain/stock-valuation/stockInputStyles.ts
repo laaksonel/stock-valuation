@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { SliderContainer } from '../../core/component/Slider';
+import { device } from '../../core/theme/stockTheme';
 
 export const StockDataContainer = styled.div`
   display: flex;
@@ -17,7 +18,9 @@ export const InputContainer = styled.div`
 `;
 
 export const MeasurementBoxContainer = styled(InputContainer)`
-  flex-direction: row;
+  @media ${device.laptopM} {
+    flex-direction: row;
+  }
   justify-content: space-between;
   align-self: center;
 `;
@@ -30,7 +33,7 @@ export const MultiplierContainer = styled.div`
   }
 `;
 export const MultiplierInputContainer = styled.div`
-  width: 10%;
   margin-left: 5%;
   box-sizing: border-box;
+  width: 60px;
 `;

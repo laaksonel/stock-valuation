@@ -25,8 +25,15 @@ export const ResultSection = styled.div`
   width: 75%;
 `;
 
+export const FinalResultContainer = styled(ResultContainer)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
 export const MainTitle = styled.span`
   font-size: 32px;
+  font-family: 'Roboto Medium', sans-serif;
 `;
 export const ValueContainer = styled.div`
   padding-top: 2%;
@@ -37,8 +44,8 @@ export const ValueName = styled.div`
 `;
 
 export const Value = styled.div`
-  font-size: 24px;
-  font-weight: bold;
+  font-size: 32px;
+  font-family: 'Roboto Medium', sans-serif;
 `;
 
 interface ColorProp {
@@ -46,8 +53,7 @@ interface ColorProp {
 }
 
 export const FinalEstimate = styled.div`
-  font-size: 48px;
-  text-align: center;
+  font-size: 2.75vw;
   grid-area: final-estimate;
   color: ${(props: ColorProp) => props.color}
 `;

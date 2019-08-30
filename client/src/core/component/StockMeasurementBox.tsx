@@ -1,9 +1,14 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { InputHeader, Input } from '../theme/stockTheme';
+import { InputHeader, Input, device } from '../theme/stockTheme';
 
 const MeasurementContainer = styled.div`
-  display: inline-block;
+  display: flex;
+  justify-content: space-between;
+
+  @media ${device.laptopM} {
+    display: block;
+  }
 `;
 
 interface IStockMeasurementBox {
