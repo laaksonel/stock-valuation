@@ -10,9 +10,6 @@ export const StockDataContainer = styled.div`
 
 export const InputContainer = styled.div`
   width: 85%;
-  @media ${device.mobileM} {
-    width: 75%;
-  }
 
   display: flex;
   flex-direction: column;
@@ -22,7 +19,7 @@ export const InputContainer = styled.div`
 `;
 
 export const MeasurementBoxContainer = styled(InputContainer)`
-  @media ${device.laptopM} {
+  @media ${device.tablet} {
     flex-direction: row;
   }
   justify-content: space-between;

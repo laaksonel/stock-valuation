@@ -1,12 +1,13 @@
 import styled from 'styled-components';
 import { CSSProperties } from 'react';
+import { device } from '../../core/theme/stockTheme';
 
 export const SearchBoxDiv = styled.div`
-    align-self: center;
-    position: absolute;
-    margin: 0 37.5%;
-    display: inline-flex;
-    width: 25%;
+    display: flex;
+
+    width: 100%;
+    max-width: 360px;
+
     border-radius: 4px;
     :focus: {
       border-color: #80bdff;

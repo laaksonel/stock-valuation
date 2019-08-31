@@ -1,8 +1,9 @@
 import * as React from 'react';
 import styled from 'styled-components';
+import { device } from '../theme/stockTheme';
 
 const MainContentDiv = styled.div`
-  margin-top: 4rem;
+
   display: flex;
   flex-direction: column;
   align-items: center;

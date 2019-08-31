@@ -36,7 +36,7 @@ export const Input = styled.input`
   width: 100px;
   max-width: 100%;
 
-  @media ${device.mobileL} {
+  @media ${device.tablet} {
     width: 150px;
   }
 

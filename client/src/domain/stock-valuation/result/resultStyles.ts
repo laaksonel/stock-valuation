@@ -18,7 +18,7 @@ export const ResultSection = styled.div`
   flex-direction: column;
   padding: 7.5%;
 
-  @media ${device.mobileM} {
+  @media ${device.tablet} {
     display: grid;
 
     grid-template-columns: 49% 49%;
@@ -28,7 +28,7 @@ export const ResultSection = styled.div`
       'estimate final-estimate';
 
     align-self: center;
-    width: 75%;
+    width: 90%;
     padding: 0%;
   }
 `;

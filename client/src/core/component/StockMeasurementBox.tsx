@@ -6,7 +6,7 @@ const MeasurementContainer = styled.div`
   display: flex;
   justify-content: space-between;
 
-  @media ${device.laptopM} {
+  @media ${device.tablet} {
     display: block;
   }
 `;
