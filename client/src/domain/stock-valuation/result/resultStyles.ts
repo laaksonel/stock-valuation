@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { device } from '../../../core/theme/stockTheme';
 
 export interface ResultContainerProps {
   gridArea: string;
@@ -13,16 +14,23 @@ export const ResultContainer = styled.div`
 `;
 
 export const ResultSection = styled.div`
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  padding: 7.5%;
 
-  grid-template-columns: 49% 49%;
-  grid-column-gap: 2%;
-  grid-template-areas:
-    'estimate current-price'
-    'estimate final-estimate';
+  @media ${device.mobileM} {
+    display: grid;
 
-  align-self: center;
-  width: 75%;
+    grid-template-columns: 49% 49%;
+    grid-column-gap: 2%;
+    grid-template-areas:
+      'estimate current-price'
+      'estimate final-estimate';
+
+    align-self: center;
+    width: 75%;
+    padding: 0%;
+  }
 `;
 
 export const FinalResultContainer = styled(ResultContainer)`
@@ -53,7 +61,7 @@ interface ColorProp {
 }
 
 export const FinalEstimate = styled.div`
-  font-size: 2.75vw;
+  font-size: 32px;
   grid-area: final-estimate;
   color: ${(props: ColorProp) => props.color}
 `;

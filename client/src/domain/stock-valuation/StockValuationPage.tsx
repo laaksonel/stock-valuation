@@ -75,14 +75,15 @@ class StockValuationPage extends React.Component<StockValuationProps, StockValua
 
 const PageContainer = styled.div`
   width: 100%;
+  padding: 5%;
 
   @media ${device.mobileL} {
     width: 50%;
+    padding: 3%;
   }
 
   background-color: white;
   border-radius: 5px;
-  padding: 3%;
   box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.25);
   display: flex;
   flex-direction: column;

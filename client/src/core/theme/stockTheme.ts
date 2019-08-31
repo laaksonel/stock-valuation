@@ -34,6 +34,7 @@ export const Input = styled.input`
   padding-left: 5px;
   font-size: 24px;
   width: 100px;
+  max-width: 100%;
 
   @media ${device.mobileL} {
     width: 150px;

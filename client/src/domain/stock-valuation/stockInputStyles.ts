@@ -9,9 +9,13 @@ export const StockDataContainer = styled.div`
 `;
 
 export const InputContainer = styled.div`
+  width: 85%;
+  @media ${device.mobileM} {
+    width: 75%;
+  }
+
   display: flex;
   flex-direction: column;
-  width: 75%;
   align-self: center;
   padding-top: 2%;
   padding-bottom: 2%;

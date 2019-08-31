@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import Header from './core/layout/Header';
 import MainContent from './core/layout/MainContent';
 import TickerSearch from './domain/stock-search/TickerSearch';
-import { createGlobalStyle } from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 import StockValuationPage from './domain/stock-valuation/StockValuationPage';
 
 const DefaultTheme = {

@@ -51,7 +51,7 @@ export default class StockValuationResult extends React.Component<StockValuation
 
           <ResultContainer gridArea="current-price">
             <ValueContainer>
-              <ValueName>Current price</ValueName>
+              <ValueName>Current market price</ValueName>
               <Value>${ this.props.currentPrice }</Value>
             </ValueContainer>
           </ResultContainer>
