@@ -8,6 +8,8 @@ export const SearchBoxDiv = styled.div`
     width: 100%;
     max-width: 360px;
 
+    box-sizing: border-box;
+
     border-radius: 4px;
     :focus: {
       border-color: #80bdff;
@@ -54,8 +56,9 @@ export const searchBarTheme = {
     backgroundColor: 'white',
     position: 'absolute',
     width: '100%',
+    maxWidth: '360px',
     display: 'block',
-    margin: '10% auto',
+    margin: '30px auto',
     left: 0,
     right: 0,
     border: '1px solid #ced4da',
