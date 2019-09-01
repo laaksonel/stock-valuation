@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
 import {
   ResultSection,
   ResultContainer,
@@ -9,31 +10,17 @@ import {
   FinalEstimate,
   FinalResultContainer,
 } from './resultStyles';
-import { StockValuationParams, StockValuationMultipliers } from '../../stockEntity';
-import { StockValuation, calculateValuation } from '../valueCalculation';
+import { hasValue } from '../valueCalculation';
+import { IAppState } from '../../app.reducer';
+import { getValuationResults, ValuationResult } from '../stock.reducer';
 
-interface StockValuationResultProps extends StockValuationParams {
-  currentPrice: number | undefined;
-  multipliers: StockValuationMultipliers;
-}
-
-export default class StockValuationResult extends React.Component<StockValuationResultProps> {
-  private valuation: StockValuation;
-
-  constructor(props: StockValuationResultProps) {
-    super(props);
-    this.valuation = calculateValuation(props);
-  }
-
-  componentWillUpdate() {
-    this.valuation = calculateValuation(this.props);
-  }
-
-  render() {
+class StockValuationResult extends React.Component<ValuationResult> {
+  public render() {
     const {
+      currentPrice,
       valueInFiveYears,
       todayIntrinsicValue,
-    } = this.valuation;
+    } = this.props;
 
     return (
       <ResultSection>
@@ -41,30 +28,40 @@ export default class StockValuationResult extends React.Component<StockValuation
             <MainTitle>Estimates</MainTitle>
             <ValueContainer>
               <ValueName>Five years</ValueName>
-              <Value>${ valueInFiveYears.toFixed(2) }</Value>
+              <Value>{ formatResult(valueInFiveYears) }</Value>
             </ValueContainer>
             <ValueContainer>
               <ValueName>Today</ValueName>
-              <Value>${ todayIntrinsicValue.toFixed(2) }</Value>
+              <Value>{ formatResult(todayIntrinsicValue) }</Value>
             </ValueContainer>
           </ResultContainer>
 
           <ResultContainer gridArea="current-price">
             <ValueContainer>
               <ValueName>Current market price</ValueName>
-              <Value>${ this.props.currentPrice }</Value>
+              <Value>{ currencyPrefix(currentPrice) }</Value>
             </ValueContainer>
           </ResultContainer>
           <FinalResultContainer gridArea="final-estimate">
-            { createFinalEstimate(this.props.currentPrice, todayIntrinsicValue) }
+            { createFinalEstimate(currentPrice, todayIntrinsicValue) }
           </FinalResultContainer>
       </ResultSection>
     );
   }
 }
 
-const createFinalEstimate = (currentPrice: number | undefined, todayIntrinsicValue: number) => {
-  if (currentPrice) {
+const mapStateToProps = (state: IAppState) => {
+  return getValuationResults(state.stock);
+};
+
+export default connect(mapStateToProps)(StockValuationResult);
+
+const currencyPrefix = (value: number | undefined): string => value
+  ? `$${value}`
+  : '-';
+
+const createFinalEstimate = (currentPrice: number | undefined, todayIntrinsicValue: number | undefined) => {
+  if (currentPrice && todayIntrinsicValue) {
     const isUndervalued = currentPrice < todayIntrinsicValue;
     return (
       <FinalEstimate color={isUndervalued ? 'green' : 'red'}>
@@ -77,6 +74,18 @@ const createFinalEstimate = (currentPrice: number | undefined, todayIntrinsicVal
     );
   }
 
-  return null;
+  return '-';
 };
 
+const formatResult = (x: number | undefined) =>
+  runIfPresent(x, twoDecimals, '-');
+
+const runIfPresent = (
+  x: number | undefined,
+  formatter: (_: number) => string,
+  orElse: string,
+) => hasValue(x)
+     ? formatter(x)
+     : orElse;
+
+const twoDecimals = (x: number) => `$${x.toFixed(2)}`;

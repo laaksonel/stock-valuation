@@ -18,13 +18,9 @@ export default class StockParameters extends React.Component<StockParameterProps
     const {
       onUpdateValuationData,
       onMultiplierChange,
-    } = this.props;
-
-    const {
       data,
       multipliers,
     } = this.props;
-
 
     const buildDataInput = (k: keyof StockData) =>
       createMeasurement(k, data[k], onUpdateValuationData);

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import StockValuationResult from './result/StockValuationResult';
-import { StockData, StockDispatch, updateStockData } from './stock.reducer';
+import { StockData, StockDispatch, updateStockData, updateValuation } from './stock.reducer';
 import { StockMultiplierKey, StockValuationMultipliers } from '../stockEntity';
 import StockParameters from './parameters/StockParameters';
 import { IAppState } from '../app.reducer';
@@ -9,67 +9,48 @@ import { bindActionCreators } from 'redux';
 import styled from 'styled-components';
 import { device } from '../../core/theme/stockTheme';
 
-interface StockValuationProps extends StateProps, DispatchProps { }
-interface StockValuationState {
-  multipliers: StockValuationMultipliers;
-}
-
-class StockValuationPage extends React.Component<StockValuationProps, StockValuationState> {
-  constructor(props: StockValuationProps) {
-    super(props);
-    this.state = {
-      multipliers: {
-        discount: 10,
-        marginOfSafety: 10,
-      },
-    };
-  }
-
-  private onUpdateValuationData = (key: keyof StockData, value: number) => {
+class StockValuationPage extends React.Component<StateProps & DispatchProps> {
+  private onUpdateValuationData = (key: keyof StockData, value?: number) => {
     if (this.props.currentStockData) {
       const valuationData: StockData = {
         ...this.props.currentStockData,
         [key]: value,
       };
 
-      this.props.updateStockData(valuationData);
+      this.props.updateValuation(this.props.multipliers, valuationData);
     }
   }
 
   private onMultipliersChange = (key: StockMultiplierKey, value: number) => {
     const multipliers: StockValuationMultipliers = {
-      ...this.state.multipliers,
+      ...this.props.multipliers,
       [key]: value,
     };
 
-    this.setState({
-      ...this.state,
+    this.props.updateValuation(
       multipliers,
-    });
+      this.props.currentStockData,
+    );
   }
 
   public render() {
     const {
-      currentPrice,
       currentStockData,
+      multipliers,
     } = this.props;
 
-    return currentStockData && (
+    return (
       <PageContainer>
         <StockParameters
           data={currentStockData}
           onMultiplierChange={this.onMultipliersChange}
           onUpdateValuationData={this.onUpdateValuationData}
-          multipliers={this.state.multipliers}
+          multipliers={multipliers}
         />
 
-        <StockValuationResult
-          valuationData={currentStockData}
-          currentPrice={currentPrice}
-          multipliers={this.state.multipliers}
-        />
+        <StockValuationResult />
       </PageContainer>
-    ) || null;
+    );
   }
 }
 
@@ -93,7 +74,7 @@ const PageContainer = styled.div`
 const mapDispatchToProps = (dispatch: StockDispatch) =>
   bindActionCreators({
     updateStockData,
-  // tslint:disable-next-line: align
+    updateValuation,
   }, dispatch);
 
 const mapStateToProps = (state: IAppState) => state.stock;

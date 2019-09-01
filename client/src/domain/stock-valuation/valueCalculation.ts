@@ -1,27 +1,54 @@
 import { StockValuationParams, StockValuationMultipliers } from '../stockEntity';
+import { StockData } from './stock.reducer';
 
 export interface StockValuation {
-  valueInFiveYears: number;
-  todayIntrinsicValue: number;
+  valueInFiveYears?: number;
+  todayIntrinsicValue?: number;
 }
 
-type StockDataProps = StockValuationParams & {
+export type StockDataProps = StockValuationParams & {
   multipliers: StockValuationMultipliers,
 };
 
-export function calculateValuation(valuationInputs: StockDataProps): StockValuation {
-  const {
-    valuationData,
-    multipliers,
-  } = valuationInputs;
+type PresentData = {
+  eps: number;
+  averageFiveYearPE: number;
+  expectedGrowthRatePercent: number;
+};
 
+export const hasValue = (x?: number): x is number => x !== undefined;
+const hasAllValues = (data: StockData): data is PresentData => {
   const {
     eps,
     averageFiveYearPE,
     expectedGrowthRatePercent,
+  } = data;
+
+  return hasValue(averageFiveYearPE)
+    && hasValue(eps)
+    && hasValue(expectedGrowthRatePercent);
+};
+
+export function calculateValuation(
+  multipliers: StockValuationMultipliers,
+  valuationData: StockData,
+): StockValuation {
+  if (!hasAllValues(valuationData)) {
+    return {
+      valueInFiveYears: undefined,
+      todayIntrinsicValue: undefined,
+    };
+  }
+
+  const {
+    expectedGrowthRatePercent,
+    averageFiveYearPE,
+    eps,
   } = valuationData;
 
-  const growthWithMarginOfSafety = (100 * expectedGrowthRatePercent) * (1 - multipliers.marginOfSafety / 100);
+  const growthWithMarginOfSafety =
+    (100 * expectedGrowthRatePercent) * (1 - multipliers.marginOfSafety / 100);
+
   const asFiveYearGrowth = Math.pow(1 + (growthWithMarginOfSafety / 100), 5);
   const result = averageFiveYearPE * eps * asFiveYearGrowth;
 
