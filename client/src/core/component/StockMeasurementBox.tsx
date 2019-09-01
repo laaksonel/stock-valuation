@@ -14,15 +14,22 @@ const MeasurementContainer = styled.div`
 interface IStockMeasurementBox {
   title: string;
   valueName: string;
-  initialValue: number;
-  onChange: (newValue: number) => void;
+  initialValue?: number;
+  onChange: (newValue: number | undefined) => void;
 }
 
 export default class StockMeasurementBox extends React.Component<IStockMeasurementBox> {
   private changeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const v = +e.target.value;
-    if (!Number.isNaN(v)) {
-      this.props.onChange(v);
+    const rawValue = e.target.value;
+
+    const isValidNumber = !Number.isNaN(+rawValue);
+    const isEmpty = rawValue === '';
+
+    if (isValidNumber || isEmpty) {
+      const finalValue = isEmpty
+        ? undefined
+        : +rawValue;
+      this.props.onChange(finalValue);
     }
   }
 
@@ -38,9 +45,9 @@ export default class StockMeasurementBox extends React.Component<IStockMeasureme
         <InputHeader>{title}</InputHeader>
         <Input
           width="150px"
-          type="number"
+          type="text"
           name={valueName}
-          value={currentValue}
+          value={currentValue || ''}
           onChange={this.changeValue}
         />
       </MeasurementContainer>
