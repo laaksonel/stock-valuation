@@ -11,6 +11,8 @@ export interface StockData {
   expectedGrowthRatePercent: OptionalNumber;
 }
 
+export type StockDataKey = keyof StockData;
+
 export type StockDataResponse = StockData & { currentPrice: number; };
 
 // Actions

@@ -16,18 +16,18 @@ interface MultiplierSliderState {
 }
 
 export default class MultiplierSlider extends React.Component<MultiplierSliderProps, MultiplierSliderState> {
-  private updateValues = (v: number) => {
-    this.props.updateMultipliers(this.props.sliderId, v);
-    this.setState({
-      currentValue: v,
-    });
-  }
-
   constructor(props: MultiplierSliderProps) {
     super(props);
     this.state = {
       currentValue: props.initialValue,
     };
+  }
+
+  private updateValues = (v: number) => {
+    this.props.updateMultipliers(this.props.sliderId, v);
+    this.setState({
+      currentValue: v,
+    });
   }
 
   render() {
@@ -36,7 +36,7 @@ export default class MultiplierSlider extends React.Component<MultiplierSliderPr
     } = this.props;
 
     return (
-      <div key={key}>
+      <div>
         <InputHeader>{ translations[key] }</InputHeader>
         <MultiplierContainer>
           <Slider

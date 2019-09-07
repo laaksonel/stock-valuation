@@ -80,4 +80,5 @@ const mapDispatchToProps = (dispatch: StockDispatch) =>
 const mapStateToProps = (state: IAppState) => state.stock;
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = ReturnType<typeof mapDispatchToProps>;
+
 export default connect(mapStateToProps, mapDispatchToProps)(StockValuationPage);

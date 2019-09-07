@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { StockMultiplierKey, StockValuationMultipliers } from '../../entity/stock.entity';
-import { StockData, OptionalNumber } from '../stock.reducer';
+import { StockData, OptionalNumber, StockDataKey } from '../stock.reducer';
 import { StockDataContainer, InputContainer, MeasurementBoxContainer } from '../input.styles';
 import StockMeasurementBox from './StockMeasurementBox';
 import { translations } from '../../entity/stock.translation';
 import MultiplierSlider from './MultiplierSlider';
 
 interface StockParameterProps {
-  onUpdateValuationData: (key: keyof StockData, value: OptionalNumber) => void;
+  onUpdateValuationData: (key: StockDataKey, value: OptionalNumber) => void;
   onMultiplierChange:    (key: StockMultiplierKey, value: number) => void;
   data: StockData;
   multipliers: StockValuationMultipliers;
@@ -22,11 +22,11 @@ export default class StockParameters extends React.Component<StockParameterProps
       multipliers,
     } = this.props;
 
-    const buildDataInput = (k: keyof StockData) =>
+    const buildDataInput = (k: StockDataKey) =>
       createMeasurement(k, data[k], onUpdateValuationData);
 
     const stockDataInputs = Object.keys(data)
-      .map(k => k as keyof StockData) // This holds as long as Object.keys is used
+      .map(k => k as StockDataKey) // This holds as long as Object.keys is used
       .map(k => buildDataInput(k));
 
     const multiplierSliders = Object.keys(multipliers)
@@ -46,7 +46,6 @@ export default class StockParameters extends React.Component<StockParameterProps
   }
 }
 
-type StockDataKey = keyof StockData;
 function createMeasurement(
   key: StockDataKey,
   initialValue: OptionalNumber,
@@ -63,17 +62,15 @@ function createMeasurement(
   );
 }
 
-function createMultiplierSliders(
+const createMultiplierSliders = (
   key: StockMultiplierKey,
   initialValue: number,
   callback: (k: StockMultiplierKey, v: number) => void,
-) {
-  return (
-    <MultiplierSlider
-      key={key}
-      initialValue={initialValue}
-      sliderId={key}
-      updateMultipliers={callback}
-    />
-  );
-}
+) => (
+  <MultiplierSlider
+    key={key}
+    initialValue={initialValue}
+    sliderId={key}
+    updateMultipliers={callback}
+  />
+);

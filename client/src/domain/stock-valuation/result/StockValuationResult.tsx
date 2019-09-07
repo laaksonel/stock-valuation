@@ -9,7 +9,7 @@ import {
   ValueName,
   FinalEstimate,
   FinalResultContainer,
-} from './resultStyles';
+} from './result.styles';
 import { hasValue } from '../valueCalculation';
 import { IAppState } from '../../app.reducer';
 import { getValuationResults, ValuationResult, OptionalNumber } from '../stock.reducer';
