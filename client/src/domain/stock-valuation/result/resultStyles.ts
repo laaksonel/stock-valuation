@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { device } from '../../../core/theme/stockTheme';
+import { device } from '../../../core/theme/mainTheme';
 
 export interface ResultContainerProps {
   gridArea: string;

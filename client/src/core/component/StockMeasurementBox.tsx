@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { InputHeader, Input, device } from '../theme/stockTheme';
 
 const MeasurementContainer = styled.div`
   display: flex;
@@ -10,6 +9,7 @@ const MeasurementContainer = styled.div`
     display: block;
   }
 `;
+import { InputHeader, Input } from '../theme/mainTheme';
 
 interface IStockMeasurementBox {
   title: string;

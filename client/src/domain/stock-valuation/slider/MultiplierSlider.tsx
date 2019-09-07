@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StockMultiplierKey } from '../../stockEntity';
 import { MultiplierContainer, MultiplierInputContainer } from '../stockInputStyles';
-import { Input, InputHeader } from '../../../core/theme/stockTheme';
+import { Input, InputHeader } from '../../../core/theme/mainTheme';
 import Slider from '../../../core/component/Slider';
 import { translations } from '../../stockTranslation';
 

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { CSSProperties } from 'react';
-import { device } from '../../core/theme/stockTheme';
+import { device } from '../../core/theme/mainTheme';
 
 export const SearchBoxDiv = styled.div`
     display: flex;

@@ -7,7 +7,7 @@ import { IAppState } from '../app.reducer';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import styled from 'styled-components';
-import { device } from '../../core/theme/stockTheme';
+import { device } from '../../core/theme/mainTheme';
 
 class StockValuationPage extends React.Component<StateProps & DispatchProps> {
   private onUpdateValuationData = (key: keyof StockData, value?: number) => {

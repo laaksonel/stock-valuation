@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 
 const size = {
   mobileS: '320px',
@@ -52,3 +52,12 @@ export const InputHeader = styled.h4`
   font-family: 'Roboto', sans-serif;
 `;
 
+export const DefaultTheme = {
+  backgroundColor: '#E5E5E5',
+};
+
+export const GlobalStyle = createGlobalStyle<typeof DefaultTheme>`
+  body {
+    background-color: ${props => props.backgroundColor};
+  }
+`;

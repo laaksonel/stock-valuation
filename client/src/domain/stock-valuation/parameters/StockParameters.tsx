@@ -70,6 +70,7 @@ function createMultiplierSliders(
 ) {
   return (
     <MultiplierSlider
+      key={key}
       initialValue={initialValue}
       sliderId={key}
       updateMultipliers={callback}
