@@ -39,15 +39,14 @@ export default class StockMeasurementBox extends React.Component<IStockMeasureme
       initialValue: currentValue,
       valueName,
     } = this.props;
-
     return (
       <MeasurementContainer>
         <InputHeader>{title}</InputHeader>
         <Input
           width="150px"
-          type="text"
+          type="number"
           name={valueName}
-          value={currentValue || ''}
+          value={currentValue !== undefined ? currentValue : ''}
           onChange={this.changeValue}
         />
       </MeasurementContainer>
