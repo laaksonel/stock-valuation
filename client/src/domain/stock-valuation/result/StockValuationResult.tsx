@@ -12,7 +12,7 @@ import {
 } from './resultStyles';
 import { hasValue } from '../valueCalculation';
 import { IAppState } from '../../app.reducer';
-import { getValuationResults, ValuationResult } from '../stock.reducer';
+import { getValuationResults, ValuationResult, OptionalNumber } from '../stock.reducer';
 
 class StockValuationResult extends React.Component<ValuationResult> {
   public render() {
@@ -56,11 +56,11 @@ const mapStateToProps = (state: IAppState) => {
 
 export default connect(mapStateToProps)(StockValuationResult);
 
-const currencyPrefix = (value: number | undefined): string => value
+const currencyPrefix = (value: OptionalNumber): string => value
   ? `$${value}`
   : '-';
 
-const createFinalEstimate = (currentPrice: number | undefined, todayIntrinsicValue: number | undefined) => {
+const createFinalEstimate = (currentPrice: OptionalNumber, todayIntrinsicValue: OptionalNumber) => {
   if (currentPrice && todayIntrinsicValue) {
     const isUndervalued = currentPrice < todayIntrinsicValue;
     return (
@@ -77,11 +77,11 @@ const createFinalEstimate = (currentPrice: number | undefined, todayIntrinsicVal
   return '-';
 };
 
-const formatResult = (x: number | undefined) =>
+const formatResult = (x: OptionalNumber) =>
   runIfPresent(x, twoDecimals, '-');
 
 const runIfPresent = (
-  x: number | undefined,
+  x: OptionalNumber,
   formatter: (_: number) => string,
   orElse: string,
 ) => hasValue(x)

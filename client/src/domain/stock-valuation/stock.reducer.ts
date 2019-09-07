@@ -3,10 +3,12 @@ import { ThunkDispatch } from 'redux-thunk';
 import { calculateValuation, StockValuation } from './valueCalculation';
 import { StockValuationMultipliers } from '../entity/stock.entity';
 
+export type OptionalNumber = number | undefined;
+
 export interface StockData {
-  eps: number | undefined;
-  averageFiveYearPE: number | undefined;
-  expectedGrowthRatePercent: number | undefined;
+  eps: OptionalNumber;
+  averageFiveYearPE: OptionalNumber;
+  expectedGrowthRatePercent: OptionalNumber;
 }
 
 export type StockDataResponse = StockData & { currentPrice: number; };
@@ -48,7 +50,7 @@ export type IStockAction =
 
 export interface IStockState {
   currentStockData: StockData;
-  currentPrice: number | undefined;
+  currentPrice: OptionalNumber;
   currentValuation?: StockValuation;
   multipliers: StockValuationMultipliers;
 }

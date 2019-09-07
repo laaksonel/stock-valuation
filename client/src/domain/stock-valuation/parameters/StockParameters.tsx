@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { StockMultiplierKey, StockValuationMultipliers } from '../../entity/stock.entity';
-import { StockData } from '../stock.reducer';
+import { StockData, OptionalNumber } from '../stock.reducer';
 import { StockDataContainer, InputContainer, MeasurementBoxContainer } from '../input.styles';
 import StockMeasurementBox from './StockMeasurementBox';
 import { translations } from '../../entity/stock.translation';
 import MultiplierSlider from './MultiplierSlider';
 
 interface StockParameterProps {
-  onUpdateValuationData: (key: keyof StockData, value: number | undefined) => void;
+  onUpdateValuationData: (key: keyof StockData, value: OptionalNumber) => void;
   onMultiplierChange:    (key: StockMultiplierKey, value: number) => void;
   data: StockData;
   multipliers: StockValuationMultipliers;
@@ -49,8 +49,8 @@ export default class StockParameters extends React.Component<StockParameterProps
 type StockDataKey = keyof StockData;
 function createMeasurement(
   key: StockDataKey,
-  initialValue: number | undefined,
-  callback: (k: StockDataKey, v: number | undefined) => void,
+  initialValue: OptionalNumber,
+  callback: (k: StockDataKey, v: OptionalNumber) => void,
 ) {
   return (
     <StockMeasurementBox

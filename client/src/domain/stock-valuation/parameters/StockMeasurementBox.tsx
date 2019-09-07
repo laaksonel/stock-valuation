@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { InputHeader, Input } from '../../../core/theme/main.theme';
 import { MeasurementContainer } from '../../../core/component/component.styles';
+import { OptionalNumber } from '../stock.reducer';
 
 interface IStockMeasurementBox {
   title: string;
   valueName: string;
   value?: number;
-  onChange: (newValue: number | undefined) => void;
+  onChange: (newValue: OptionalNumber) => void;
 }
 
 export default class StockMeasurementBox extends React.Component<IStockMeasurementBox> {
