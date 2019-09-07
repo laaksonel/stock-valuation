@@ -49,28 +49,12 @@ interface SliderProps {
   onChange: (value: number) => void;
 }
 
-interface SlideState {
-  value: number;
-}
-
-export default class Slider extends React.Component<SliderProps, SlideState> {
-
-  constructor(props: SliderProps) {
-    super(props);
-    this.state = {
-      value: props.initialValue,
-    };
-  }
-
-  onValueChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
+export default class Slider extends React.Component<SliderProps> {
+  private onValueChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = +e.target.value;
     if (!Number.isNaN(value)) {
       this.props.onChange(value);
     }
-
-    this.setState({
-      value,
-    });
   }
 
   public render() {
@@ -81,7 +65,7 @@ export default class Slider extends React.Component<SliderProps, SlideState> {
           name={this.props.name}
           min={0}
           max={100}
-          value={this.state.value}
+          value={this.props.initialValue}
           onChange={this.onValueChanged}
         />
       </SliderContainer>
