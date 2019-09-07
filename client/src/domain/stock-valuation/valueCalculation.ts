@@ -1,4 +1,4 @@
-import { StockValuationParams, StockValuationMultipliers } from '../stockEntity';
+import { StockValuationParams, StockValuationMultipliers } from '../entity/stock.entity';
 import { StockData } from './stock.reducer';
 
 export interface StockValuation {

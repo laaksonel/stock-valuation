@@ -1,20 +1,11 @@
 import * as React from 'react';
-import styled from 'styled-components';
-
-const MeasurementContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-
-  @media ${device.tablet} {
-    display: block;
-  }
-`;
-import { InputHeader, Input } from '../theme/mainTheme';
+import { InputHeader, Input } from '../../../core/theme/main.theme';
+import { MeasurementContainer } from '../../../core/component/component.styles';
 
 interface IStockMeasurementBox {
   title: string;
   valueName: string;
-  initialValue?: number;
+  value?: number;
   onChange: (newValue: number | undefined) => void;
 }
 
@@ -36,7 +27,7 @@ export default class StockMeasurementBox extends React.Component<IStockMeasureme
   public render() {
     const {
       title,
-      initialValue: currentValue,
+      value,
       valueName,
     } = this.props;
     return (
@@ -46,7 +37,7 @@ export default class StockMeasurementBox extends React.Component<IStockMeasureme
           width="150px"
           type="number"
           name={valueName}
-          value={currentValue !== undefined ? currentValue : ''}
+          value={value !== undefined ? value : ''}
           onChange={this.changeValue}
         />
       </MeasurementContainer>

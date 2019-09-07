@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { SliderContainer } from '../../core/component/Slider';
-import { device } from '../../core/theme/mainTheme';
+import { device } from '../../core/theme/main.theme';
+import { SliderContainer } from '../../core/component/component.styles';
 
 export const StockDataContainer = styled.div`
   display: flex;

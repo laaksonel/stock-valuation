@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { device } from '../../../core/theme/mainTheme';
+import { device } from '../../../core/theme/main.theme';
 
 export interface ResultContainerProps {
   gridArea: string;
@@ -37,7 +37,7 @@ export const FinalResultContainer = styled(ResultContainer)`
   display: flex;
   justify-content: center;
   align-items: center;
-`
+`;
 
 export const MainTitle = styled.span`
   font-size: 32px;

@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { StockMultiplierKey } from '../../stockEntity';
-import { MultiplierContainer, MultiplierInputContainer } from '../stockInputStyles';
-import { Input, InputHeader } from '../../../core/theme/mainTheme';
+import { StockMultiplierKey } from '../../entity/stock.entity';
+import { MultiplierContainer, MultiplierInputContainer } from '../input.styles';
+import { Input, InputHeader } from '../../../core/theme/main.theme';
 import Slider from '../../../core/component/Slider';
-import { translations } from '../../stockTranslation';
+import { translations } from '../../entity/stock.translation';
 
 interface MultiplierSliderProps {
   initialValue: number;

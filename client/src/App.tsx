@@ -1,19 +1,9 @@
-import React, { Fragment } from 'react';
-import Header from './core/layout/Header';
-import MainContent from './core/layout/MainContent';
+import React from 'react';
+import Header from './core/component/Header';
 import TickerSearch from './domain/stock-search/TickerSearch';
-import styled, { createGlobalStyle } from 'styled-components';
 import StockValuationPage from './domain/stock-valuation/StockValuationPage';
-
-const DefaultTheme = {
-  backgroundColor: '#E5E5E5',
-};
-
-const GlobalStyle = createGlobalStyle<typeof DefaultTheme>`
-  body {
-    background-color: ${props => props.backgroundColor};
-  }
-`;
+import MainContent from './core/component/MainContent';
+import { GlobalStyle, DefaultTheme } from './core/theme/main.theme';
 
 class App extends React.Component {
   public render() {

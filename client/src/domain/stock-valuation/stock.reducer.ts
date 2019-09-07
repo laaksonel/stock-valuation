@@ -1,7 +1,7 @@
 import { getStockData } from '../../core/api/stockDataApi';
 import { ThunkDispatch } from 'redux-thunk';
-import { calculateValuation, StockDataProps, StockValuation } from './valueCalculation';
-import { StockValuationMultipliers } from '../stockEntity';
+import { calculateValuation, StockValuation } from './valueCalculation';
+import { StockValuationMultipliers } from '../entity/stock.entity';
 
 export interface StockData {
   eps: number | undefined;
@@ -142,7 +142,7 @@ export function updateValuation(
 
     dispatch({
       type: UPDATE_VALUATION,
-      payload: calculateValuation(multipliers, data || emptyStockData)
+      payload: calculateValuation(multipliers, data || emptyStockData),
     });
   };
 }

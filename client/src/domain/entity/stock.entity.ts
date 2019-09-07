@@ -1,4 +1,4 @@
-import { StockData } from './stock-valuation/stock.reducer';
+import { StockData } from '../stock-valuation/stock.reducer';
 
 export interface StockValuationParams {
   valuationData: StockData;
