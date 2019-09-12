@@ -38,17 +38,17 @@ final case class ExpectedGrowthRatePercent(annualGrowthPercent: Percent) extends
     ExpectedGrowthRatePercent(Math.pow(annualGrowthPercent.toGrowthDecimal, 5).floatValue())
 }
 
-final case class StockData(averageFiveYearPE: Float,
+final case class StockData(averageFiveYearPE: Option[Float],
                            eps: Float,
                            expectedGrowthRatePercent: Float,
                            currentPrice: Float)
 
 object StockData {
-  def apply(averageFiveYearPE: AverageFiveYearPE,
+  def apply(averageFiveYearPE: Option[AverageFiveYearPE],
             trailingEps: RawValue,
             growthRatePercent: RawValue,
             currentPrice: Float): StockData =
-    new StockData(averageFiveYearPE.value,
+    new StockData(averageFiveYearPE.map(_.value),
                   trailingEps.raw,
                   growthRatePercent.raw,
                   currentPrice)
