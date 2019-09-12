@@ -6,7 +6,7 @@ import { OptionalNumber } from '../stock.reducer';
 interface IStockMeasurementBox {
   title: string;
   valueName: string;
-  value?: number;
+  value: OptionalNumber;
   onChange: (newValue: OptionalNumber) => void;
 }
 
@@ -19,7 +19,7 @@ export default class StockMeasurementBox extends React.Component<IStockMeasureme
 
     if (isValidNumber || isEmpty) {
       const finalValue = isEmpty
-        ? undefined
+        ? null
         : +rawValue;
       this.props.onChange(finalValue);
     }
@@ -31,6 +31,7 @@ export default class StockMeasurementBox extends React.Component<IStockMeasureme
       value,
       valueName,
     } = this.props;
+
     return (
       <MeasurementContainer>
         <InputHeader>{title}</InputHeader>
@@ -38,7 +39,7 @@ export default class StockMeasurementBox extends React.Component<IStockMeasureme
           width="150px"
           type="number"
           name={valueName}
-          value={value !== undefined ? value : ''}
+          value={value !== null ? value : ''}
           onChange={this.changeValue}
         />
       </MeasurementContainer>

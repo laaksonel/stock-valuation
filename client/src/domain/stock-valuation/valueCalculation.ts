@@ -1,9 +1,9 @@
 import { StockValuationParams, StockValuationMultipliers } from '../entity/stock.entity';
-import { StockData } from './stock.reducer';
+import { StockData, OptionalNumber } from './stock.reducer';
 
 export interface StockValuation {
-  valueInFiveYears?: number;
-  todayIntrinsicValue?: number;
+  valueInFiveYears: OptionalNumber;
+  todayIntrinsicValue: OptionalNumber;
 }
 
 export type StockDataProps = StockValuationParams & {
@@ -16,7 +16,7 @@ type PresentData = {
   expectedGrowthRatePercent: number;
 };
 
-export const hasValue = (x?: number): x is number => x !== undefined;
+export const hasValue = (x: OptionalNumber): x is number => x !== null;
 const hasAllValues = (data: StockData): data is PresentData => {
   const {
     eps,
@@ -35,8 +35,8 @@ export function calculateValuation(
 ): StockValuation {
   if (!hasAllValues(valuationData)) {
     return {
-      valueInFiveYears: undefined,
-      todayIntrinsicValue: undefined,
+      valueInFiveYears: null,
+      todayIntrinsicValue: null,
     };
   }
 

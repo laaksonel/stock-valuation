@@ -1,6 +1,6 @@
 import * as React from 'react';
 import StockValuationResult from './result/StockValuationResult';
-import { StockData, StockDispatch, updateStockData, updateValuation } from './stock.reducer';
+import { StockData, StockDispatch, updateStockData, updateValuation, OptionalNumber } from './stock.reducer';
 import { StockMultiplierKey, StockValuationMultipliers } from '../entity/stock.entity';
 import StockParameters from './parameters/StockParameters';
 import { IAppState } from '../app.reducer';
@@ -10,7 +10,7 @@ import styled from 'styled-components';
 import { device } from '../../core/theme/main.theme';
 
 class StockValuationPage extends React.Component<StateProps & DispatchProps> {
-  private onUpdateValuationData = (key: keyof StockData, value?: number) => {
+  private onUpdateValuationData = (key: keyof StockData, value: OptionalNumber) => {
     if (this.props.currentStockData) {
       const valuationData: StockData = {
         ...this.props.currentStockData,

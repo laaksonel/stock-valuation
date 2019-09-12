@@ -3,7 +3,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { calculateValuation, StockValuation } from './valueCalculation';
 import { StockValuationMultipliers } from '../entity/stock.entity';
 
-export type OptionalNumber = number | undefined;
+export type OptionalNumber = number | null;
 
 export interface StockData {
   eps: OptionalNumber;
@@ -12,14 +12,12 @@ export interface StockData {
 }
 
 export type StockDataKey = keyof StockData;
-
 export type StockDataResponse = StockData & { currentPrice: number; };
 
-// Actions
 const FETCH_SELECTED_STOCK_SUCCESS = 'stock/fetch-selected-stock';
-const UPDATE_STOCKDATA = 'stock/update-stock-data';
-const UPDATE_VALUATION = 'stock/update-valuation';
-const UPDATE_MULTIPLIERS = 'stock/update-multipliers';
+const UPDATE_STOCKDATA             = 'stock/update-stock-data';
+const UPDATE_VALUATION             = 'stock/update-valuation';
+const UPDATE_MULTIPLIERS           = 'stock/update-multipliers';
 
 interface FetchSelectedStockSuccess {
   type: typeof FETCH_SELECTED_STOCK_SUCCESS;
@@ -53,20 +51,24 @@ export type IStockAction =
 export interface IStockState {
   currentStockData: StockData;
   currentPrice: OptionalNumber;
-  currentValuation?: StockValuation;
+  currentValuation: StockValuation;
   multipliers: StockValuationMultipliers;
 }
 
+// TODO: Get rid of this null shit
 const emptyStockData: StockData = {
-  eps: undefined,
-  averageFiveYearPE: undefined,
-  expectedGrowthRatePercent: undefined,
+  eps: null,
+  averageFiveYearPE: null,
+  expectedGrowthRatePercent: null,
 };
 
 const emptyState: IStockState = {
   currentStockData: emptyStockData,
-  currentValuation: undefined,
-  currentPrice: undefined,
+  currentValuation: {
+    valueInFiveYears: null,
+    todayIntrinsicValue: null,
+  },
+  currentPrice: null,
   multipliers: {
     discount: 10,
     marginOfSafety: 10,
@@ -152,9 +154,9 @@ export function updateValuation(
 }
 
 export interface ValuationResult {
-  currentPrice?: number;
-  valueInFiveYears?: number;
-  todayIntrinsicValue?: number;
+  currentPrice: OptionalNumber;
+  valueInFiveYears: OptionalNumber;
+  todayIntrinsicValue: OptionalNumber;
 }
 
 export function getValuationResults(state: IStockState): ValuationResult {
