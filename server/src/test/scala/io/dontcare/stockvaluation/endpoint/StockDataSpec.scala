@@ -9,10 +9,11 @@ import io.dontcare.stockvaluation.entity.StockTicker
 import org.http4s._
 import org.http4s.implicits._
 import org.specs2.matcher.{JsonMatchers, MatchResult}
+import org.specs2.mutable.Specification
 
 import scala.io.Source
 
-class StockDataSpec extends org.specs2.mutable.Specification with JsonMatchers {
+class StockDataSpec extends Specification with JsonMatchers {
 
   "StockData" >> {
     "returns 200" >> {

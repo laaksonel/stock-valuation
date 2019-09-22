@@ -4,8 +4,9 @@ import cats.effect.IO
 import org.http4s.implicits._
 import org.http4s.{Method, Request, Response, Status, _}
 import org.specs2.matcher.{JsonMatchers, JsonType, Matcher}
+import org.specs2.mutable.Specification
 
-class StockSuggestionSpec extends org.specs2.mutable.Specification with JsonMatchers {
+class StockSuggestionSpec extends Specification with JsonMatchers {
   "StockSuggestion" >> {
     "returns 200" >> {
       suggestionRequest.status must beEqualTo(Status.Ok)
