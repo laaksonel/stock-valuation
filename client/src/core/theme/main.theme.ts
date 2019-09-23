@@ -41,6 +41,15 @@ export const Input = styled.input`
   }
 
   box-sizing: border-box;
+
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  & {
+    -moz-appearance:textfield;
+  }
 `;
 
 export const InputHeader = styled.h4`
