@@ -1,33 +1,33 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { device } from '../theme/main.theme';
 
 export const SliderContainer = styled.div``;
+
+const rangeThumb = css`
+    height: 32px;
+    width: 32px;
+    background: #fff;
+    border: 2px solid #C4C4C4;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-top: -13px;
+`;
 
 export const CommonInput = styled.input`
   box-sizing: border-box;
   width: 100%;
   height: 100%;
   -webkit-appearance: none;
+  -moz-appearance: none;
   background: transparent;
 
   &::-webkit-slider-thumb {
     -webkit-appearance: none;
-    height: 32px;
-    width: 32px;
-    background: #fff;
-    border: 2px solid #C4C4C4;
-    border-radius: 16px;
-    cursor: pointer;
-    margin-top: -13px;
+    ${rangeThumb}
   };
 
   &::-moz-range-thumb {
-    height: 32px;
-    width: 32px;
-    background: #fff;
-    border: 1px solid #000;
-    border-radius: 8px;
-    cursor: pointer;
+    ${rangeThumb}
   };
 
   &::-webkit-slider-runnable-track {
@@ -36,6 +36,14 @@ export const CommonInput = styled.input`
     cursor: pointer;
     background: #C4C4C4;
   }
+
+  &::-moz-range-track {
+    width: 100%;
+    height: 5px;
+    cursor: pointer;
+    background: #C4C4C4;
+  }
+
 
   &:focus {
     outline: none;
