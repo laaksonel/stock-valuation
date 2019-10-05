@@ -73,6 +73,11 @@ Release the latest pushed image to production
 heroku container:release web --app <APP_NAME>
 ```
 
+## Current demo
+
+Current build can be found from Heroku
+https://stock-valuation.herokuapp.com/
+
 ## TODOS / Further ideas
 
 Client:
