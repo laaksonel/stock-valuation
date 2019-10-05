@@ -30,6 +30,48 @@ More detailed instructions about the deployment (to Heroku) are in README.md und
 #### Frontend
 
 This is just a basic create-react-app, I'm pretty sure most people know the drill
+`build.sh` build the production version and runs the dockerization
+
+#### HAProxy loadbalancer
+Simply dockerize it
+```
+docker build -t stock-valuation-lb .
+```
+
+## Deployment
+
+Login to Heroku with the CLI
+```
+heroku login
+```
+
+Set the application stack (the OS image used as a platform for you app) to the Docker one
+```
+heroku stack:set container
+```
+
+Login to the Heroku registry
+```
+heroku container:login
+```
+
+Tag the image with the application name and push it to the remote registry
+
+```
+docker tag <IMAGE_NAME> registry.heroku.com/<APP_NAME>/web
+docker push registry.heroku.com/<APP_NAME>/web
+```
+For example, deploying the frontend image
+```
+docker build -t stock-valuation-frontend .
+docker tag stock-valuation-frontend registry.heroku.com/stock-valuation-frontend/web
+docker push registry.heroku.com/stock-valuation-frontend/web
+```
+
+Release the latest pushed image to production
+```
+heroku container:release web --app <APP_NAME>
+```
 
 ## TODOS / Further ideas
 
