@@ -35,7 +35,7 @@ export default class StockParameters extends React.Component<StockParameterProps
 
     return (
       <StockDataContainer>
-        <MeasurementBoxContainer>
+        <MeasurementBoxContainer noValidate>
           { stockDataInputs }
         </MeasurementBoxContainer>
         <InputContainer>

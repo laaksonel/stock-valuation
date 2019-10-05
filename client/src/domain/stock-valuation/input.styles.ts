@@ -8,7 +8,7 @@ export const StockDataContainer = styled.div`
   padding-bottom: 2%;
 `;
 
-export const InputContainer = styled.div`
+export const InputContainer = styled.form`
   width: 85%;
 
   display: flex;
