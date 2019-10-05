@@ -1,0 +1,4 @@
+{
+	"name": "Stock valuation Load Balancer",
+	"description": "A load balancer for Stock Valuator"
+}
