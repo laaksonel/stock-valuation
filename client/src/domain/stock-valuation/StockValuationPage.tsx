@@ -58,6 +58,7 @@ const PageContainer = styled.div`
   width: 100%;
   max-width: 800px;
   padding: 5%;
+  box-sizing: border-box;
 
   @media ${device.tablet} {
     width: 85%;
