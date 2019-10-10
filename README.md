@@ -4,8 +4,19 @@
 - Scala backend fetches stock data from Morning star and Yahoo Finance
 - React frontend displays a form filled with the data requested from the backend and calculates the current value
 
+## Technologies
+
+Client
+- Typescript
+- React, Redux
+
+Backend
+- Scala
+- http4s
+
 ## How it works
-- Pass the official stock ticker
+- Pass the official stock ticker to the search textbox
+- Wait a fucking time because of Heroku free tier until you get the stocks as search results
 - The app fetches the required stats and calculates the current value of the company with the selected margin of safety and discount value
 - The calculation formula basically just extrapolates the historical performance of the company
 	- Yes, this is the very first mistake an investor can make, so please *do not buy anything based on the past numbers*
